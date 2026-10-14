@@ -1,0 +1,55 @@
+# Model 2: RT-DETR-ResNet18 改进版
+# 改进点: 1.TripletAttention三重注意力(Backbone) 2.HSFPN语义特征金字塔 3.SIoU损失函数
+# 适用于道路缺陷检测
+
+# Parameters
+nc: 80  # number of classes
+scales:
+  # [depth, width, max_channels]
+  l: [1.00, 1.00, 1024]
+
+# 自定义损失函数设置
+loss_type: 'SIoU'  # 使用SIoU损失
+
+backbone:
+  # [from, repeats, module, args]
+  - [-1, 1, ConvNormLayer, [32, 3, 2, 1, 'relu']] # 0-P1
+  - [-1, 1, ConvNormLayer, [32, 3, 1, 1, 'relu']] # 1
+  - [-1, 1, ConvNormLayer, [64, 3, 1, 1, 'relu']] # 2
+  - [-1, 1, nn.MaxPool2d, [3, 2, 1]] # 3-P2
+
+  # 改进1: TripletAttention三重注意力
+  - [-1, 2, Blocks, [64,  BasicBlock_TripletAttention, 2, True]] # 4
+  - [-1, 2, Blocks, [128, BasicBlock_TripletAttention, 3, True]] # 5-P3
+  - [-1, 2, Blocks, [256, BasicBlock_TripletAttention, 4, True]] # 6-P4
+  - [-1, 2, Blocks, [512, BasicBlock_TripletAttention, 5, True]] # 7-P5
+
+head:
+  # 改进2: HSFPN语义特征金字塔
+  - [-1, 1, GSConv, [256, 1, 1, None, 1, 1, False]]  # 8 input_proj.2
+  - [-1, 1, AIFI, [1024, 8]]
+  - [-1, 1, CA, []] # 10
+  - [-1, 1, nn.Conv2d, [256, 1]] # 11
+  - [-1, 3, RepC3, [256, 0.5]] # 12 P5
+
+  - [6, 1, CA, []]  # 13
+  - [-1, 1, nn.Conv2d, [256, 1]]  # 14
+
+  - [11, 1, nn.ConvTranspose2d, [256, 3, 2, 1, 1]] # 15
+  - [-1, 1, CA, [4, False]]  # 16
+  - [[-1, 14], 1, multiply, []] # 17
+  - [[-1, 15], 1, Add, []] # 18
+  - [-1, 3, RepC3, [256, 0.5]] # 19 P4
+
+  - [5, 1, CA, []] # 20
+  - [-1, 1, nn.Conv2d, [256, 1]] # 21
+
+  - [15, 1, nn.ConvTranspose2d, [256, 3, 2, 1, 1]] # 22
+  - [-1, 1, CA, [4, False]] # 23
+  - [[-1, 21], 1, multiply, []] # 24
+  - [[-1, 22], 1, Add, []] # 25
+  - [-1, 3, RepC3, [256, 0.5]] # 26 P3
+
+  - [[26, 19, 12], 1, RTDETRDecoder, [nc, 256, 300, 4, 8, 3]]  # Detect(P3, P4, P5)
+
+

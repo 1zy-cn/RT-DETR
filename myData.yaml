@@ -1,0 +1,8 @@
+path: /autodl-fs/data/RT-DETR/datasets/drr2022
+train: train/images
+val: val/images
+test: test/images
+
+nc: 7
+names: ['0','1','2','3','4','5','6']
+

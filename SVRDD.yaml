@@ -1,0 +1,15 @@
+# SVRDD - Street View Road Damage Detection Dataset
+path: /autodl-fs/data/RT-DETR/datasets/SVRDD
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 7
+names:
+  0: D00-纵向裂缝
+  1: D10-横向裂缝
+  2: D20-网状裂缝
+  3: D40-坑槽
+  4: D43-斑马线模糊
+  5: D44-井盖
+  6: D50-修补

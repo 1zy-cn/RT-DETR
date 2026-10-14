@@ -1,0 +1,62 @@
+# Ultralytics RT-DETR-ResNet18 Optimized for RDD2022
+# 论文架构名称: RT-DETR-R18-HSFPN-SCSA
+# 改进点:
+# 1. Backbone: ResNet18 (稳定基座)
+# 2. Neck: HSFPN (高频特征金字塔) 替代原版 HybridEncoder
+# 3. Attention: SCSA (空间通道序列注意力) 嵌入融合层
+
+# Parameters
+nc: 8  # RDD2022 类别数 (请确认是否为8，如果是其他数字请修改)
+scales:
+  l: [1.00, 1.00, 1024]
+
+backbone:
+  # [from, repeats, module, args]
+  - [-1, 1, Conv, [64, 3, 2]]  # 0-P1/2
+  - [-1, 1, Conv, [64, 3, 1]]  # 1
+  - [-1, 1, Conv, [128, 3, 2]] # 2-P2/4
+  - [-1, 2, ResNetLayer, [128, 128, 1, 1]] # 3
+  - [-1, 1, Conv, [256, 3, 2]] # 4-P3/8
+  - [-1, 2, ResNetLayer, [256, 256, 1, 1]] # 5
+  - [-1, 1, Conv, [512, 3, 2]] # 6-P4/16
+  - [-1, 2, ResNetLayer, [512, 512, 1, 1]] # 7
+  - [-1, 1, Conv, [1024, 3, 2]] # 8-P5/32
+  - [-1, 2, ResNetLayer, [1024, 1024, 1, 1]] # 9
+
+head:
+  # ================== Encoder / Neck 改进区 ==================
+
+  # --- 处理 P5 (Layer 9) ---
+  - [-1, 1, Conv, [256, 1, 1]]  # 10: P5 降维 -> 256ch
+  - [-1, 1, nn.Upsample, [None, 2, 'nearest']] # 11: 上采样
+
+  # --- 处理 P4 (Layer 7) ---
+  - [7, 1, Conv, [256, 1, 1]]   # 12: P4 降维 -> 256ch
+
+  # [创新点1] HSFPN 高频融合 (P5_up + P4)
+  # 使用 Concat 规避多输入报错，HSFPN 内部会自动处理融合
+  - [[11, 12], 1, Concat, [1]]  # 13: 拼接
+  - [-1, 1, HSFPN, [256]]       # 14: HSFPN 提取高频边缘特征
+  - [-1, 1, SCSA, [256]]        # 15: SCSA 过滤背景噪声 (输出 P4_fused)
+
+  # --- 处理 P3 (Layer 5) ---
+  - [15, 1, nn.Upsample, [None, 2, 'nearest']] # 16: P4_fused 上采样
+  - [5, 1, Conv, [256, 1, 1]]   # 17: P3 降维 -> 256ch
+
+  # [创新点2] P3 层融合
+  - [[16, 17], 1, Concat, [1]]  # 18: 拼接
+  - [-1, 1, HSFPN, [256]]       # 19: HSFPN
+  - [-1, 1, SCSA, [256]]        # 20: SCSA (输出 P3_final)
+
+  # --- 重新下采样构建 P4_final, P5_final (RT-DETR 需要) ---
+  - [-1, 1, Conv, [256, 3, 2]]  # 21: 下采样
+  - [[21, 15], 1, Concat, [1]]  # 22: 拼接回 P4_fused
+  - [-1, 1, Conv, [256, 1, 1]]  # 23: 融合 (输出 P4_final)
+
+  - [-1, 1, Conv, [256, 3, 2]]  # 24: 下采样
+  - [[24, 10], 1, Concat, [1]]  # 25: 拼接回 P5 (shortcut)
+  - [-1, 1, Conv, [256, 1, 1]]  # 26: 融合 (输出 P5_final)
+
+  # ================== Decoder / Head 区 ==================
+  # 输入: [P3(20), P4(23), P5(26)]
+  - [[20, 23, 26], 1, RTDETRDecoder, [nc, 256, 300, 4, 8, 3]] # 27

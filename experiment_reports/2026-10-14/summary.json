@@ -1,0 +1,83 @@
+{
+  "captured_at": "2026-10-14T21:43:37+08:00",
+  "selection": "maximum validation mAP50-95 row, not a fresh best.pt evaluation",
+  "runs": [
+    {
+      "run": "RDD-rtdetr-resnet18",
+      "epochs": 300,
+      "best_epoch": 300,
+      "precision": 0.8277,
+      "recall": 0.79488,
+      "map50": 0.84518,
+      "map50_95": 0.55247
+    },
+    {
+      "run": "rtdetr-resnet18",
+      "epochs": 95,
+      "best_epoch": 95,
+      "precision": 0.7571,
+      "recall": 0.66703,
+      "map50": 0.73065,
+      "map50_95": 0.46818
+    },
+    {
+      "run": "rtdetr-resnet18-HSFPN",
+      "epochs": 300,
+      "best_epoch": 300,
+      "precision": 0.86645,
+      "recall": 0.79545,
+      "map50": 0.87032,
+      "map50_95": 0.62246
+    },
+    {
+      "run": "rtdetr-resnet18-HSFPN+SCSA",
+      "epochs": 300,
+      "best_epoch": 300,
+      "precision": 0.86629,
+      "recall": 0.81198,
+      "map50": 0.88096,
+      "map50_95": 0.61849
+    },
+    {
+      "run": "rtdetr-resnet18-SCSA",
+      "epochs": 300,
+      "best_epoch": 300,
+      "precision": 0.84996,
+      "recall": 0.79539,
+      "map50": 0.86445,
+      "map50_95": 0.59665
+    }
+  ],
+  "sha256": {
+    "RDD-rtdetr-resnet18/results.csv": "abb2423bda3832497970e78887c9b3f474eede4a32d6a39ae814a3d102240f45",
+    "RDD-rtdetr-resnet18/args.yaml": "da32ef9cedeafe65be02316e1cb250898503b9b29859ea656c9e6293b6c235e0",
+    "RDD-rtdetr-resnet18/results.png": "4f525afe1b3dcf9a705ab9aa5e795697c57d0a6d72fefb81a31b3f8769ac88d9",
+    "RDD-rtdetr-resnet18/PR_curve.png": "0caa2562f3da5f77780b1214645c2897f4ac652505f58c6a690a615cedee09d4",
+    "RDD-rtdetr-resnet18/P_curve.png": "ff7cca04f4ea089d564278abb379ac18f5d52a138ba1f79083cf56a65438c09b",
+    "RDD-rtdetr-resnet18/R_curve.png": "05540b3bdc18f2cf16c61c3f45afa2a17f54cc67c99ca55bb2c1bc78fe4659e3",
+    "RDD-rtdetr-resnet18/F1_curve.png": "8ef7a96304125490ffd35ce7d3d6bca7c36828fe2e1de54fb621b94935437124",
+    "rtdetr-resnet18/results.csv": "65b03c847a4c4a031e8fa989062e06611da5ca6d89c8ab163cea6654279da2b0",
+    "rtdetr-resnet18/args.yaml": "9684896a379cb4e19f3a4a0412c64aedd78c679e57e9d9c78dcedd3678ab85c4",
+    "rtdetr-resnet18-HSFPN/results.csv": "8f1acfb0a291bf6a6f51bb4eebff6303d821dd742b5700d77459bfb182d8f22c",
+    "rtdetr-resnet18-HSFPN/args.yaml": "f94ecff3c52a80a7bef94cbf9bd72da45ce69ba1b2a5aefeec82f51db5c3fc2b",
+    "rtdetr-resnet18-HSFPN/results.png": "7fd1e679c90bef4afa53478bb8c6335e818d02fdf4bae9ed52c9efe1b234cf53",
+    "rtdetr-resnet18-HSFPN/PR_curve.png": "b90845148b2aefd230cdc173baa9a51e1abc86550a7f4a616e4ea6936f7f65e2",
+    "rtdetr-resnet18-HSFPN/P_curve.png": "5cccff0f3b785957bd7010a891e535a5a513f81532d39eaaa7b71c3a08f372d9",
+    "rtdetr-resnet18-HSFPN/R_curve.png": "ffbac481e4df498ba82d02467e784a386269587296d94a8f4099b71c11c17e21",
+    "rtdetr-resnet18-HSFPN/F1_curve.png": "00efc23edd3a7a1ad361d943c4069a2d238d8608c413718d355a0f59a86b272c",
+    "rtdetr-resnet18-HSFPN+SCSA/results.csv": "bb7021de04cae0425ad359c90f51090a1a3f6e07cfb962404a33beeff6e6af74",
+    "rtdetr-resnet18-HSFPN+SCSA/args.yaml": "523e8e21e068a06338afc4843ce74a8c683bb1bf0f2654e3d4ed7c4d5469fccf",
+    "rtdetr-resnet18-HSFPN+SCSA/results.png": "da98e067227d286caf9ead25ca6073c0039e719e5b4b0bd3df4dfd870099ee58",
+    "rtdetr-resnet18-HSFPN+SCSA/PR_curve.png": "d516d81720b1795d31a755884d309d6fe228dcc5a743d7571f1ff34cbf31118d",
+    "rtdetr-resnet18-HSFPN+SCSA/P_curve.png": "4de9cfbc57d6b7871c007e0bfa9e6873233cd639e8e7801fb621827b8f1d018d",
+    "rtdetr-resnet18-HSFPN+SCSA/R_curve.png": "80c49eb75f628a3b19306d6c04be6117188ba7b77b50b901081063843363a824",
+    "rtdetr-resnet18-HSFPN+SCSA/F1_curve.png": "eda00b15dfed9b65b32108df2249ace1147bb7622f92cba1504e554a54884ffe",
+    "rtdetr-resnet18-SCSA/results.csv": "8c44f96adcf8239db1469ef3ee938387976a54dc92ba3c81651509dd77714412",
+    "rtdetr-resnet18-SCSA/args.yaml": "9f635c1054be76db530f6c596e103c8c23bbd45032e53a4baa62bfffc8babaec",
+    "rtdetr-resnet18-SCSA/results.png": "8d7e2eb1741e901120ad6efa198322b197da892b1f6a1733a987beca3958f9ee",
+    "rtdetr-resnet18-SCSA/PR_curve.png": "e79af8cda7fb16971c954187ce60f9007910c843616928fac116899ac012a969",
+    "rtdetr-resnet18-SCSA/P_curve.png": "28467b17c9f27c9e55ced65425725b6700338dd82e9bb858bb6322b050f595e3",
+    "rtdetr-resnet18-SCSA/R_curve.png": "f9dc8248151afde143f4275aceb5e5c33f648a620228c72ed0e0ab0193584113",
+    "rtdetr-resnet18-SCSA/F1_curve.png": "7353bbbcd1befc761159720e5956165629e5f5a5fef90b2b563a92f743eeaffa"
+  }
+}
