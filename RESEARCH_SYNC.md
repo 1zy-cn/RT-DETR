@@ -6,11 +6,13 @@ See [inspection report](experiment_reports/2026-10-14/CHECK_REPORT.md) for exper
 
 The completed 300-epoch SVRDD baseline is archived in the [2026-10-17 baseline report](experiment_reports/2026-10-17/BASELINE_REPORT.md), including CSV metrics, configurations, curves, TensorBoard logs, and checkpoint hashes. The 2026-10-14 baseline snapshot is incomplete and retained as historical evidence.
 
+The completed, enabled SCSA experiment is archived in the [SCSA comparison report](experiment_reports/2026-10-17-scsa-enabled/SCSA_REPORT.md). Its checkpoints contain eight active SCSA modules. Compared with the baseline, validation mAP50 increased by 1.496 percentage points and mAP50–95 decreased by 0.804 points; this is a mixed result, not an across-the-board improvement. The SCSA configuration fixes and CPU checks are included on `main`; the baseline configurations remain available.
+
 The original upstream README and LICENSE are preserved. Datasets, checkpoints and live runs remain on the AutoDL server.
 
 ## 多设备共享同一份代码
 
-仓库：https://github.com/1zy-cn/RT-DETR （公开）。克隆和拉取不需要 GitHub 登录；推送仍需有写权限的 GitHub 认证。服务器已配置仓库专用 SSH 认证；不要把服务器私钥复制到其他电脑。
+仓库：https://github.com/1zy-cn/RT-DETR （公开）。克隆和拉取不需要 GitHub 登录；推送仍需有写权限的 GitHub 认证。更换服务器后，旧容器的 SSH 密钥和环境依赖不一定保留；没有原密钥时可将远程地址改为上述 HTTPS 地址用于拉取，并为需要推送的设备单独配置认证。
 
 新电脑首次使用：
 

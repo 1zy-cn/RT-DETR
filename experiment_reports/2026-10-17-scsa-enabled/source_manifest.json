@@ -1,0 +1,105 @@
+{
+  "source_run": "/autodl-fs/data/RT-DETR-SCSA-runs/rtdetr-resnet18-SCSA-enabled-s0",
+  "shared_checkout": "/autodl-fs/data/RT-DETR",
+  "shared_checkout_branch": "main",
+  "shared_checkout_commit": "4a09acf1720b649abafcdfd26f7c9bb19e6eef90",
+  "shared_checkout_status": "M train.py",
+  "original_training_checkout_exists": false,
+  "training_source_commit": null,
+  "training_source_note": "The original temporary training checkout is absent. Current shared checkout is NOT evidence of training source revision.",
+  "epochs": 300,
+  "last_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1387,
+    "train/cls_loss": 0.32639,
+    "train/l1_loss": 0.11025,
+    "metrics/precision(B)": 0.88067,
+    "metrics/recall(B)": 0.83139,
+    "metrics/mAP50(B)": 0.89274,
+    "metrics/mAP50-95(B)": 0.61173,
+    "val/giou_loss": 1.1189,
+    "val/cls_loss": 0.32994,
+    "val/l1_loss": 0.11547,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "best_map5095_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1387,
+    "train/cls_loss": 0.32639,
+    "train/l1_loss": 0.11025,
+    "metrics/precision(B)": 0.88067,
+    "metrics/recall(B)": 0.83139,
+    "metrics/mAP50(B)": 0.89274,
+    "metrics/mAP50-95(B)": 0.61173,
+    "val/giou_loss": 1.1189,
+    "val/cls_loss": 0.32994,
+    "val/l1_loss": 0.11547,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "best_fitness_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1387,
+    "train/cls_loss": 0.32639,
+    "train/l1_loss": 0.11025,
+    "metrics/precision(B)": 0.88067,
+    "metrics/recall(B)": 0.83139,
+    "metrics/mAP50(B)": 0.89274,
+    "metrics/mAP50-95(B)": 0.61173,
+    "val/giou_loss": 1.1189,
+    "val/cls_loss": 0.32994,
+    "val/l1_loss": 0.11547,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "raw_files": {
+    "rtdetr-resnet18-SCSA-enabled-s0/args.yaml": {
+      "sha256": "557bacba8dec2adbcba14420b86a059d73d3a17846e3e21cc9c1380fbddbdc58",
+      "bytes": 1722
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/results.csv": {
+      "sha256": "02094a32ee478148181cd2c068a4526ad4d0eea37ee235826f70c8b2cd16aece",
+      "bytes": 101136
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/results.png": {
+      "sha256": "31d30a5f371e64f48e72dfceb5341900fd31d75ee83fe1ac96c421db08c4626c",
+      "bytes": 253430
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/PR_curve.png": {
+      "sha256": "8890de724db59892cf92c437c76984fa235bb8c1e725d62aa6c7996bde47ee05",
+      "bytes": 206464
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/P_curve.png": {
+      "sha256": "1625ee35bb80f6d792b9d1e5d03997b87913b9cf9dccb77ae92d367b2e4b89b1",
+      "bytes": 207305
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/R_curve.png": {
+      "sha256": "c400020c904c930bca89d9f4a08129d1e699fbfcfdb9c70169cfa511be460ae8",
+      "bytes": 201338
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/F1_curve.png": {
+      "sha256": "26e8115f838b6d5544cc365cf69954b3da52927335b4dfb11500ceb7f85020cd",
+      "bytes": 254767
+    },
+    "rtdetr-resnet18-SCSA-enabled-s0/tensorboard/events.out.tfevents.1792145449.autodl-container-e0e94fa6ba-2cc95100.1584.0": {
+      "sha256": "66eeec499cab96441895d68a05481d79b9f646b8fd7c60503a11333051b1ab60",
+      "bytes": 201165
+    }
+  },
+  "weights": {
+    "best.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR-SCSA-runs/rtdetr-resnet18-SCSA-enabled-s0/weights/best.pt",
+      "bytes": 40628466,
+      "sha256": "413cb02621b1455228b343158fab3be1f958c07732fcf94410e17c2261748d94"
+    },
+    "last.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR-SCSA-runs/rtdetr-resnet18-SCSA-enabled-s0/weights/last.pt",
+      "bytes": 40628466,
+      "sha256": "1a0858d12f490f9f4cf6e3be88cc5e4ec6c66e4c8cb60af46bfa3190b7a5b9e9"
+    }
+  }
+}

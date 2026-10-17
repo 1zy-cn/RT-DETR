@@ -1,0 +1,128 @@
+{
+  "scope": "Existing 300-epoch validation records, not a fresh validation or independent test evaluation.",
+  "source_csv": {
+    "baseline": "../2026-10-17/rtdetr-resnet18/results.csv",
+    "scsa": "rtdetr-resnet18-SCSA-enabled-s0/results.csv"
+  },
+  "selection": "Epoch 300 is best by both mAP50-95 and fitness=0.1*mAP50+0.9*mAP50-95 for both runs.",
+  "last_epoch": {
+    "baseline": {
+      "epoch": 300.0,
+      "train/giou_loss": 1.1248,
+      "train/cls_loss": 0.33924,
+      "train/l1_loss": 0.10267,
+      "metrics/precision(B)": 0.86433,
+      "metrics/recall(B)": 0.81595,
+      "metrics/mAP50(B)": 0.87778,
+      "metrics/mAP50-95(B)": 0.61977,
+      "val/giou_loss": 1.106,
+      "val/cls_loss": 0.34095,
+      "val/l1_loss": 0.10464,
+      "lr/pg0": 0.0001,
+      "lr/pg1": 0.0001,
+      "lr/pg2": 0.0001
+    },
+    "scsa": {
+      "epoch": 300.0,
+      "train/giou_loss": 1.1387,
+      "train/cls_loss": 0.32639,
+      "train/l1_loss": 0.11025,
+      "metrics/precision(B)": 0.88067,
+      "metrics/recall(B)": 0.83139,
+      "metrics/mAP50(B)": 0.89274,
+      "metrics/mAP50-95(B)": 0.61173,
+      "val/giou_loss": 1.1189,
+      "val/cls_loss": 0.32994,
+      "val/l1_loss": 0.11547,
+      "lr/pg0": 0.0001,
+      "lr/pg1": 0.0001,
+      "lr/pg2": 0.0001
+    }
+  },
+  "delta_percentage_points": {
+    "metrics/precision(B)": 1.633999999999991,
+    "metrics/recall(B)": 1.544000000000001,
+    "metrics/mAP50(B)": 1.4959999999999973,
+    "metrics/mAP50-95(B)": -0.8040000000000047
+  },
+  "args_differences": {
+    "data": {
+      "baseline": "SVRDD.yaml",
+      "scsa": "/root/autodl-tmp/RT-DETR-SCSA/SVRDD.yaml"
+    },
+    "model": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18/weights/last.pt",
+      "scsa": "/root/autodl-tmp/RT-DETR-SCSA/ultralytics/cfg/models/rt-detr/rtdetr-resnet18-SCSA.yaml"
+    },
+    "name": {
+      "baseline": "rtdetr-resnet18",
+      "scsa": "rtdetr-resnet18-SCSA-enabled-s0"
+    },
+    "nbs": {
+      "baseline": 8,
+      "scsa": 64
+    },
+    "project": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs",
+      "scsa": "/root/autodl-fs/RT-DETR-SCSA-runs"
+    },
+    "save_dir": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18",
+      "scsa": "/root/autodl-fs/RT-DETR-SCSA-runs/rtdetr-resnet18-SCSA-enabled-s0"
+    }
+  },
+  "checkpoint_nbs": 8,
+  "curves": {
+    "baseline": {
+      "last20_mean_map5095": 0.612757,
+      "epoch290_map5095": 0.6124,
+      "epoch290_to300_gain_pp": 0.7369999999999988,
+      "derived_mean_ap055_to095": 0.5911022222222222
+    },
+    "scsa": {
+      "last20_mean_map5095": 0.604514,
+      "epoch290_map5095": 0.60311,
+      "epoch290_to300_gain_pp": 0.8619999999999961,
+      "derived_mean_ap055_to095": 0.5805066666666667
+    },
+    "scsa_wins_epochs201_300": {
+      "metrics/mAP50(B)": 100,
+      "metrics/mAP50-95(B)": 0
+    }
+  },
+  "per_class_ap50_source": "Manually transcribed from the archived PR_curve.png legends; values rounded to 3 decimals by the plotting code.",
+  "per_class_ap50_rounded": {
+    "class_ids": [
+      "D00",
+      "D10",
+      "D20",
+      "D40",
+      "D43",
+      "D44",
+      "D50"
+    ],
+    "baseline": [
+      0.865,
+      0.839,
+      0.922,
+      0.849,
+      0.887,
+      0.9,
+      0.883
+    ],
+    "scsa": [
+      0.885,
+      0.867,
+      0.942,
+      0.854,
+      0.901,
+      0.916,
+      0.886
+    ]
+  },
+  "code_checks": {
+    "passed": 8,
+    "failed": 0,
+    "scope": "checks/test_scsa.py; synthetic CPU forward/backward/update and 640-pixel inference. Full upstream export/GPU/integration suite not run."
+  }
+}
