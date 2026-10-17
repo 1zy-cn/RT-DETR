@@ -1,0 +1,161 @@
+{
+  "captured_at": "2026-10-17T10:21:52+08:00",
+  "source_root": "/autodl-fs/data/RT-DETR",
+  "source_run": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18",
+  "source_branch": "main",
+  "source_commit": "4a09acf1720b649abafcdfd26f7c9bb19e6eef90",
+  "source_working_tree": "M train.py",
+  "training_complete": true,
+  "recorded_epochs": 300,
+  "target_epochs": 300,
+  "epoch_sequence_valid": true,
+  "all_csv_values_finite": true,
+  "evaluation_scope": "Existing per-epoch validation metrics; no fresh evaluation or independent test evaluation",
+  "best_row_selection": "maximum metrics/mAP50-95(B) in results.csv",
+  "last_epoch": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1248,
+    "train/cls_loss": 0.33924,
+    "train/l1_loss": 0.10267,
+    "metrics/precision(B)": 0.86433,
+    "metrics/recall(B)": 0.81595,
+    "metrics/mAP50(B)": 0.87778,
+    "metrics/mAP50-95(B)": 0.61977,
+    "val/giou_loss": 1.106,
+    "val/cls_loss": 0.34095,
+    "val/l1_loss": 0.10464,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "best_map5095_epoch": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1248,
+    "train/cls_loss": 0.33924,
+    "train/l1_loss": 0.10267,
+    "metrics/precision(B)": 0.86433,
+    "metrics/recall(B)": 0.81595,
+    "metrics/mAP50(B)": 0.87778,
+    "metrics/mAP50-95(B)": 0.61977,
+    "val/giou_loss": 1.106,
+    "val/cls_loss": 0.34095,
+    "val/l1_loss": 0.10464,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "checkpoints": {
+    "best.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18/weights/best.pt",
+      "bytes": 40502682,
+      "sha256": "60b4eaa16d974f6b101713782d44fe9c8d240e877abdf08b23150def11c3589f",
+      "stored_epoch": -1,
+      "optimizer_present": false,
+      "ema_present": false,
+      "date": "2026-10-17T04:38:31.189687",
+      "version": "8.0.237",
+      "scsa_modules": 0,
+      "model_yaml": "ultralytics/cfg/models/rt-detr/rtdetr-resnet18.yaml",
+      "model_parameters": 20095404,
+      "train_metrics": {
+        "metrics/precision(B)": 0.86433,
+        "metrics/recall(B)": 0.81595,
+        "metrics/mAP50(B)": 0.87778,
+        "metrics/mAP50-95(B)": 0.61977,
+        "val/giou_loss": 1.10598,
+        "val/cls_loss": 0.34095,
+        "val/l1_loss": 0.10464,
+        "fitness": 0.64557
+      }
+    },
+    "last.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18/weights/last.pt",
+      "bytes": 40502682,
+      "sha256": "b173c4eab1613b0a4d51850f4e2ab6fc33d6c2b7447be4f9721ca472298091e0",
+      "stored_epoch": -1,
+      "optimizer_present": false,
+      "ema_present": false,
+      "date": "2026-10-17T04:38:31.189687",
+      "version": "8.0.237",
+      "scsa_modules": 0,
+      "model_yaml": "ultralytics/cfg/models/rt-detr/rtdetr-resnet18.yaml",
+      "model_parameters": 20095404,
+      "train_metrics": {
+        "metrics/precision(B)": 0.86433,
+        "metrics/recall(B)": 0.81595,
+        "metrics/mAP50(B)": 0.87778,
+        "metrics/mAP50-95(B)": 0.61977,
+        "val/giou_loss": 1.10598,
+        "val/cls_loss": 0.34095,
+        "val/l1_loss": 0.10464,
+        "fitness": 0.64557
+      }
+    }
+  },
+  "archived_files": {
+    "rtdetr-resnet18/results.csv": {
+      "bytes": 101136,
+      "sha256": "4c01cb6e617ac79898985410f549218a050fde276c35213d030f342e4bb1a8cb"
+    },
+    "rtdetr-resnet18/args.yaml": {
+      "bytes": 1623,
+      "sha256": "5d047b68de21054af43cfe16b4457d568190ad03ba0b319d19b46cc1eb66fd29"
+    },
+    "rtdetr-resnet18/results.png": {
+      "bytes": 253790,
+      "sha256": "bf084143b6ea958e2d74fb3698eae8df62b8e51f63661c61e14fc9527b50e508"
+    },
+    "rtdetr-resnet18/PR_curve.png": {
+      "bytes": 215426,
+      "sha256": "5c8e94b303c10fe4d2309bce3c655811cc2dea0222d1f92119a4ab5c5774d503"
+    },
+    "rtdetr-resnet18/P_curve.png": {
+      "bytes": 207579,
+      "sha256": "278b72883c9d23c89b8931a320e2893b46eecd765b26df923aed4a4d551c10cd"
+    },
+    "rtdetr-resnet18/R_curve.png": {
+      "bytes": 201895,
+      "sha256": "40f8da8deaedd0717ae131b07814f7465933fc54771534314c61e402f5d9463a"
+    },
+    "rtdetr-resnet18/F1_curve.png": {
+      "bytes": 250077,
+      "sha256": "9d95c095cc53ac078953aed1f555f47ad8fcaa4ebd99ee830b70bfbc9d391788"
+    },
+    "rtdetr-resnet18/tensorboard/events.out.tfevents.1791951608.autodl-container-a63e40be4b-b4e8d2b9.1217.0": {
+      "bytes": 89562,
+      "sha256": "ae41b20bd0e342cf1fcbb60f0771d995e885ddef95df69d597d8e8fc513149a5"
+    },
+    "rtdetr-resnet18/tensorboard/events.out.tfevents.1792144819.autodl-container-b44f4a8af8-d6877077.7331.0": {
+      "bytes": 111691,
+      "sha256": "8c69f7443fcc0b45920c1c5881bcec9ca1d613920b91715411daaecd8758d43f"
+    },
+    "rtdetr-resnet18/training_entrypoint.py": {
+      "bytes": 1574,
+      "sha256": "49490939997731a836770937ee0c291c3f211414db6505250a7b2540268ea841"
+    },
+    "rtdetr-resnet18/model.yaml": {
+      "bytes": 1900,
+      "sha256": "1671290abbd9ba793a05166f3209e209017868b22d600f8bfffe83ff57a91ebf"
+    },
+    "rtdetr-resnet18/dataset.yaml": {
+      "bytes": 306,
+      "sha256": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead"
+    },
+    "rtdetr-resnet18/training_entrypoint_before_resume.py": {
+      "bytes": 811,
+      "sha256": "19c3b87b9a9b727fd4a7feb3a84652198a9781bb6537356b3e0da7febd03e5c0"
+    }
+  },
+  "excluded": [
+    "model weight binaries",
+    "dataset images and labels",
+    "batch sample images",
+    "other experiment runs"
+  ],
+  "runtime_check": {
+    "python": "3.10.8",
+    "torch": "2.0.1+cu118",
+    "cuda_initialized": false,
+    "training_or_inference_started": false
+  }
+}
