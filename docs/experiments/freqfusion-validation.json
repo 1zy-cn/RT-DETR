@@ -1,0 +1,60 @@
+{
+  "checked_at_utc": "2026-10-18T11:05:13.369535+00:00",
+  "scope": "Local synthetic CPU checks; no dataset evaluation, server changes, GPU training or accuracy claim.",
+  "runtime": {
+    "torch": "2.0.1+cpu",
+    "input": 640,
+    "training_loss_input": 256
+  },
+  "tests": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0
+  },
+  "command": "python -m pytest checks/test_scsa.py checks/test_freqfusion.py checks/test_train_entrypoint.py -q -o addopts=",
+  "models": {
+    "test_p3_detector_real_loss_and_full_resolution[rtdetr-resnet18-FreqFusion-P3.yaml-0]": {
+      "parameters": "20200094",
+      "scsa_modules": "0",
+      "freqfusion_modules": "1",
+      "synthetic_detection_loss": "465.1302795410156"
+    },
+    "test_p3_detector_real_loss_and_full_resolution[rtdetr-resnet18-SCSA-FreqFusion-P3.yaml-8]": {
+      "parameters": "20230814",
+      "scsa_modules": "8",
+      "freqfusion_modules": "1",
+      "synthetic_detection_loss": "475.056640625"
+    }
+  },
+  "cli_checks": {
+    "freqfusion": true,
+    "scsa-freqfusion": true,
+    "missing_experiment_rejected_exit_code": 2
+  },
+  "upstream_parity": {
+    "commit": "3fb0c70637a3c194fb74294d3ce4681958b26241",
+    "reference_sha256": "5852efce406681ce6f3f7763ff8e034cab44f93cb0fdda0114130bc4c8c97e42",
+    "feature_resample": true,
+    "backend": "torch_reflect",
+    "dtype": "float64",
+    "output_max_absolute_errors": [
+      5.551115123125783e-17,
+      4.440892098500626e-16,
+      1.3183898417423734e-15
+    ],
+    "gradient_max_absolute_error": 2.220446049250313e-16,
+    "gradient_tensors_checked": 22,
+    "passed": true
+  },
+  "source_sha256_lf_normalized": {
+    "train.py": "73882a9d7ef1a838dc8b21388b99b3227536ea86cbb01d82507b98cf7516c28f",
+    "ultralytics/nn/tasks.py": "6e6e0c7881be2753916f7194b4827bb699675895716826d593b3d63d8be01568",
+    "ultralytics/nn/Addmodules/FreqFusion.py": "7b2ad4121efabb1a501f0cc3550bc7a1e3d80f7ef536bf81f1abebe9e462f45b",
+    "ultralytics/nn/Addmodules/__init__.py": "7aba000eed9dfb998b1d30885cd840e84cf0769d851831a866695c5ffd3468a4",
+    "ultralytics/cfg/models/rt-detr/rtdetr-resnet18-FreqFusion-P3.yaml": "fdc79766d33bb2cff8424edc4f3924b383ee2ecaa5dd62f57271d283d2248822",
+    "ultralytics/cfg/models/rt-detr/rtdetr-resnet18-SCSA-FreqFusion-P3.yaml": "1fc15e81cc18499b7e003d5d3005a9d94729efe0d4fb7b94f33aa17e37bc1f10",
+    "checks/test_freqfusion.py": "0e37dc11efa7665fe6342bb4374cd6eb73f8558672213255a33f0b48fe2f4db1",
+    "checks/test_train_entrypoint.py": "82ce80871d882fa3dd1916899f02e47a89afd0f03e08552351819b2d70eb05fa",
+    "checks/compare_freqfusion_reference.py": "19c27aa8049644f6cd90f8ed14205ca1affd0eff6dd41a23afc4252bbd88bf81"
+  }
+}

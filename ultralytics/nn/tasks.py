@@ -808,6 +808,11 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             c2 = args[1] if args[3] else args[1] * 4
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
+        elif m is FreqFusionConcat:
+            if len(f) != 2 or n != 1:
+                raise ValueError('FreqFusionConcat expects exactly two inputs and one module')
+            c2 = sum(ch[x] for x in f)
+            args = [ch[f[0]], ch[f[1]], *args]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
         elif m in (Detect, Segment, Pose, OBB):

@@ -67,8 +67,8 @@ assert len(blocks) == 8 and all(m.att and hasattr(m, 'se') for m in blocks)
 
 如需迁移已有权重，应先按新 YAML 构建模型，再用 `model.load(...)` 加载形状匹配的参数，
 随后重新核验 SCSA；新增参数需要训练。各对照组必须采用一致、明确记录的初始化策略。
-当前 `train.py` 默认选择 `resnet18-HSFPN+SCSA.yaml`，用于重新训练有效的组合实验。
-`python train.py --check` 只检查模型结构和显示训练参数，不开始训练，也不验证数据集或 GPU。
+当前 `train.py` 要求显式选择实验；旧组合使用 `--experiment hsfpn-scsa`，新的两组选择见下文。
+`python train.py --experiment hsfpn-scsa --check` 只检查模型结构和显示训练参数，不开始训练，也不验证数据集或 GPU。
 训练启动后还会检查训练器实际构建的模型，并将入口、模型 YAML、数据 YAML 和 Git/环境信息保存在实验目录的 `source_snapshot/`。
 
 验证入口拒绝错误模型及保存配置快照：
@@ -79,3 +79,16 @@ python -m pytest checks/test_scsa.py checks/test_train_entrypoint.py -v -o addop
 
 此次检查证明启用和梯度路径有效，不衡量 mAP，不代替真实数据训练、GPU/AMP 稳定性测试或消融实验。
 历史目录名包含 SCSA 不能单独证明当时启用了注意力；旧结果先保留，待核对对应权重和训练时配置。
+
+
+## FreqFusion 两组实验
+
+新配置为 `rtdetr-resnet18-FreqFusion-P3.yaml` 和 `rtdetr-resnet18-SCSA-FreqFusion-P3.yaml`，各含一个完整 P3 FreqFusion，SCSA 数量分别为 0 和 8。两组训练入口：
+
+```bash
+python train.py --experiment freqfusion --check
+python train.py --experiment scsa-freqfusion --check
+python -m pytest checks/test_scsa.py checks/test_freqfusion.py checks/test_train_entrypoint.py -q -o addopts=
+```
+
+完整操作与实现来源见 [实验指南](../docs/experiments/freqfusion.md)。新增检查覆盖纯 PyTorch 重组的输出/梯度、真实检测损失反向与一次更新、640 推理、实验隔离、错选模型拦截及所选源码快照。

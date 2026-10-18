@@ -72,3 +72,4 @@ from .RepNCSPELAN4 import *
 from .SCSA import *
 from .BFAM import *
 from .WTConv import *
+from .FreqFusion import FreqFusionConcat

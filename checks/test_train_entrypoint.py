@@ -58,3 +58,40 @@ def test_snapshots_the_actual_training_model(entrypoint, tmp_path):
     model.model[4].blocks[0].att = False
     with pytest.raises(RuntimeError, match='HSFPN.*SCSA'):
         entrypoint.verify_model(model)
+
+
+def test_freqfusion_runs_share_protocol_but_not_output_directory(entrypoint):
+    make_args = getattr(entrypoint, 'training_args', None)
+    assert callable(make_args), 'Training entrypoint must select independent FreqFusion experiments'
+    baseline = make_args('freqfusion')
+    scsa = make_args('scsa-freqfusion')
+    assert baseline['name'] != scsa['name']
+    assert baseline['project'] == scsa['project']
+    assert {k: v for k, v in baseline.items() if k != 'name'} == {k: v for k, v in scsa.items() if k != 'name'}
+    assert baseline['batch'] == 8 and baseline['epochs'] == 300
+    assert baseline['resume'] is False and baseline['exist_ok'] is False
+
+
+@pytest.mark.parametrize('experiment, count', [('freqfusion', 0), ('scsa-freqfusion', 8)])
+def test_selected_freqfusion_model_snapshot_and_mismatch_guard(entrypoint, tmp_path, experiment, count):
+    experiments = getattr(entrypoint, 'EXPERIMENTS', {})
+    assert experiment in experiments, 'Both FreqFusion experiment choices must exist'
+    model = RTDETRDetectionModel(str(experiments[experiment]['model']), nc=7, verbose=False)
+    trainer = SimpleNamespace(model=model, save_dir=tmp_path, args=SimpleNamespace(seed=0, resume=False,
+                             data=str(ROOT / 'SVRDD.yaml')))
+    entrypoint.on_train_start(trainer, experiment=experiment)
+    meta = json.loads((tmp_path / 'source_snapshot/provenance.json').read_text(encoding='utf-8'))
+    assert meta['experiment'] == experiment
+    assert meta['model_check']['scsa_modules'] == count
+    assert meta['model_check']['freqfusion_modules'] == 1
+    assert meta['model_check']['hsfpn_ca_modules'] == 0
+    assert meta['freqfusion_backend'] == 'torch_reflect'
+    assert meta['model_yaml']['nc'] == 7
+    assert (tmp_path / 'source_snapshot' / experiments[experiment]['model'].name).exists()
+    assert (tmp_path / 'source_snapshot/FreqFusion.py').read_bytes() == (ROOT / 'ultralytics/nn/Addmodules/FreqFusion.py').read_bytes()
+    opposite = 'freqfusion' if count else 'scsa-freqfusion'
+    with pytest.raises(RuntimeError, match='Expected'):
+        entrypoint.verify_model(model, experiment=opposite)
+    model.model[17].fusion.feature_resample = False
+    with pytest.raises(RuntimeError, match='Expected'):
+        entrypoint.verify_model(model, experiment=experiment)
