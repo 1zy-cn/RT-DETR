@@ -1,0 +1,247 @@
+{
+  "scope": "Existing 300-epoch validation histories; not fresh validation or independent test evaluation.",
+  "comparability": "Combo batch=16 versus batch=8 controls: not a controlled architecture-only ablation.",
+  "selection": "All four runs have best mAP50-95 and best 0.1*mAP50+0.9*mAP50-95 at epoch 300.",
+  "source_csv": {
+    "baseline": "2026-10-17/rtdetr-resnet18/results.csv",
+    "hsfpn": "2026-10-14/rtdetr-resnet18-HSFPN/results.csv",
+    "scsa": "2026-10-17-scsa-enabled/rtdetr-resnet18-SCSA-enabled-s0/results.csv",
+    "combo": "2026-10-18-hsfpn-scsa/run/results.csv"
+  },
+  "runs": {
+    "baseline": {
+      "batch": 8,
+      "epochs": 300,
+      "csv_lf_normalized_sha256": "4c01cb6e617ac79898985410f549218a050fde276c35213d030f342e4bb1a8cb",
+      "last": {
+        "epoch": 300.0,
+        "train/giou_loss": 1.1248,
+        "train/cls_loss": 0.33924,
+        "train/l1_loss": 0.10267,
+        "metrics/precision(B)": 0.86433,
+        "metrics/recall(B)": 0.81595,
+        "metrics/mAP50(B)": 0.87778,
+        "metrics/mAP50-95(B)": 0.61977,
+        "val/giou_loss": 1.106,
+        "val/cls_loss": 0.34095,
+        "val/l1_loss": 0.10464,
+        "lr/pg0": 0.0001,
+        "lr/pg1": 0.0001,
+        "lr/pg2": 0.0001
+      },
+      "best_map5095_epoch": 300.0,
+      "best_fitness_epoch": 300.0,
+      "last20_mean_map50": 0.8736525,
+      "last20_mean_map5095": 0.612757,
+      "epoch290_to300_map5095_pp": 0.7369999999999988
+    },
+    "hsfpn": {
+      "batch": 8,
+      "epochs": 300,
+      "csv_lf_normalized_sha256": "8f1acfb0a291bf6a6f51bb4eebff6303d821dd742b5700d77459bfb182d8f22c",
+      "last": {
+        "epoch": 300.0,
+        "train/giou_loss": 1.1242,
+        "train/cls_loss": 0.34062,
+        "train/l1_loss": 0.10036,
+        "metrics/precision(B)": 0.86645,
+        "metrics/recall(B)": 0.79545,
+        "metrics/mAP50(B)": 0.87032,
+        "metrics/mAP50-95(B)": 0.62246,
+        "val/giou_loss": 1.1034,
+        "val/cls_loss": 0.3431,
+        "val/l1_loss": 0.10049,
+        "lr/pg0": 0.0001,
+        "lr/pg1": 0.0001,
+        "lr/pg2": 0.0001
+      },
+      "best_map5095_epoch": 300.0,
+      "best_fitness_epoch": 300.0,
+      "last20_mean_map50": 0.863618,
+      "last20_mean_map5095": 0.611888,
+      "epoch290_to300_map5095_pp": 1.322000000000001
+    },
+    "scsa": {
+      "batch": 8,
+      "epochs": 300,
+      "csv_lf_normalized_sha256": "02094a32ee478148181cd2c068a4526ad4d0eea37ee235826f70c8b2cd16aece",
+      "last": {
+        "epoch": 300.0,
+        "train/giou_loss": 1.1387,
+        "train/cls_loss": 0.32639,
+        "train/l1_loss": 0.11025,
+        "metrics/precision(B)": 0.88067,
+        "metrics/recall(B)": 0.83139,
+        "metrics/mAP50(B)": 0.89274,
+        "metrics/mAP50-95(B)": 0.61173,
+        "val/giou_loss": 1.1189,
+        "val/cls_loss": 0.32994,
+        "val/l1_loss": 0.11547,
+        "lr/pg0": 0.0001,
+        "lr/pg1": 0.0001,
+        "lr/pg2": 0.0001
+      },
+      "best_map5095_epoch": 300.0,
+      "best_fitness_epoch": 300.0,
+      "last20_mean_map50": 0.8888575,
+      "last20_mean_map5095": 0.604514,
+      "epoch290_to300_map5095_pp": 0.8619999999999961
+    },
+    "combo": {
+      "batch": 16,
+      "epochs": 300,
+      "csv_lf_normalized_sha256": "3086f3c39ae15371f3eb3f906e2332a04db6965732fe299e985b2f070c6194e7",
+      "last": {
+        "epoch": 300.0,
+        "train/giou_loss": 1.1488,
+        "train/cls_loss": 0.3236,
+        "train/l1_loss": 0.11281,
+        "metrics/precision(B)": 0.87381,
+        "metrics/recall(B)": 0.80808,
+        "metrics/mAP50(B)": 0.87464,
+        "metrics/mAP50-95(B)": 0.58987,
+        "val/giou_loss": 1.1284,
+        "val/cls_loss": 0.32864,
+        "val/l1_loss": 0.11742,
+        "lr/pg0": 0.0001,
+        "lr/pg1": 0.0001,
+        "lr/pg2": 0.0001
+      },
+      "best_map5095_epoch": 300.0,
+      "best_fitness_epoch": 300.0,
+      "last20_mean_map50": 0.8685525000000001,
+      "last20_mean_map5095": 0.580994,
+      "epoch290_to300_map5095_pp": 1.053000000000004
+    }
+  },
+  "combo_delta_percentage_points": {
+    "baseline": {
+      "metrics/precision(B)": 0.948,
+      "metrics/recall(B)": -0.787,
+      "metrics/mAP50(B)": -0.314,
+      "metrics/mAP50-95(B)": -2.99
+    },
+    "hsfpn": {
+      "metrics/precision(B)": 0.736,
+      "metrics/recall(B)": 1.263,
+      "metrics/mAP50(B)": 0.432,
+      "metrics/mAP50-95(B)": -3.259
+    },
+    "scsa": {
+      "metrics/precision(B)": -0.686,
+      "metrics/recall(B)": -2.331,
+      "metrics/mAP50(B)": -1.81,
+      "metrics/mAP50-95(B)": -2.186
+    }
+  },
+  "args_yaml_differences": {
+    "batch": {
+      "baseline": 8,
+      "hsfpn": 8,
+      "scsa": 8,
+      "combo": 16
+    },
+    "data": {
+      "baseline": "SVRDD.yaml",
+      "hsfpn": "SVRDD.yaml",
+      "scsa": "/root/autodl-tmp/RT-DETR-SCSA/SVRDD.yaml",
+      "combo": "SVRDD.yaml"
+    },
+    "model": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18/weights/last.pt",
+      "hsfpn": "ultralytics/cfg/models/rt-detr/rtdetr-resnet18-HSFPN.yaml",
+      "scsa": "/root/autodl-tmp/RT-DETR-SCSA/ultralytics/cfg/models/rt-detr/rtdetr-resnet18-SCSA.yaml",
+      "combo": "ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml"
+    },
+    "name": {
+      "baseline": "rtdetr-resnet18",
+      "hsfpn": "rtdetr-resnet18-HSFPN4",
+      "scsa": "rtdetr-resnet18-SCSA-enabled-s0",
+      "combo": "resnet18-HSFPN+SCSAEnable"
+    },
+    "nbs": {
+      "baseline": 8,
+      "hsfpn": 64,
+      "scsa": 64,
+      "combo": 64
+    },
+    "project": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs",
+      "hsfpn": "/autodl-fs/data/RT-DETR/runs",
+      "scsa": "/root/autodl-fs/RT-DETR-SCSA-runs",
+      "combo": "/autodl-fs/data/RT-DETR/runs"
+    },
+    "save_dir": {
+      "baseline": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18",
+      "hsfpn": "/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18-HSFPN4",
+      "scsa": "/root/autodl-fs/RT-DETR-SCSA-runs/rtdetr-resnet18-SCSA-enabled-s0",
+      "combo": "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable"
+    }
+  },
+  "combo_start_vs_checkpoint_end": {
+    "batch": {
+      "args_yaml": 16,
+      "checkpoint_train_args": 16
+    },
+    "nbs": {
+      "args_yaml": 64,
+      "checkpoint_train_args": 16
+    },
+    "mosaic": {
+      "args_yaml": 1.0,
+      "checkpoint_train_args": 0.0
+    },
+    "close_mosaic": {
+      "args_yaml": 10,
+      "checkpoint_train_args": 10
+    }
+  },
+  "runtime_mutation_note": "Trainer sets nbs=batch before optimization and close_mosaic sets mosaic=0 for the last 10 epochs. End checkpoint args are not all initial settings.",
+  "per_class_ap50_source": "PR_curve.png legends, manually transcribed; rounded to 3 decimals, not exact per-class metrics.",
+  "per_class_ap50_rounded": {
+    "class_ids": [
+      "D00",
+      "D10",
+      "D20",
+      "D40",
+      "D43",
+      "D44",
+      "D50"
+    ],
+    "baseline": [
+      0.865,
+      0.839,
+      0.922,
+      0.849,
+      0.887,
+      0.9,
+      0.883
+    ],
+    "scsa": [
+      0.885,
+      0.867,
+      0.942,
+      0.854,
+      0.901,
+      0.916,
+      0.886
+    ],
+    "combo": [
+      0.866,
+      0.843,
+      0.931,
+      0.828,
+      0.907,
+      0.889,
+      0.859
+    ]
+  },
+  "estimated_steps": {
+    "training_images_at_capture": 7393,
+    "batch8_per_epoch": 925,
+    "batch16_per_epoch": 463,
+    "batch8_total_300_epochs": 277500,
+    "batch16_total_300_epochs": 138900,
+    "assumptions": "Single device, unchanged 7393 images, no dropped final batch, accumulate=1; not measured step logs."
+  }
+}

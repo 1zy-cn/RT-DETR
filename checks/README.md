@@ -67,7 +67,15 @@ assert len(blocks) == 8 and all(m.att and hasattr(m, 'se') for m in blocks)
 
 如需迁移已有权重，应先按新 YAML 构建模型，再用 `model.load(...)` 加载形状匹配的参数，
 随后重新核验 SCSA；新增参数需要训练。各对照组必须采用一致、明确记录的初始化策略。
-已有 `train.py` 默认选择基线配置，运行 SCSA 实验前需要明确选择上述 YAML。
+当前 `train.py` 默认选择 `resnet18-HSFPN+SCSA.yaml`，用于重新训练有效的组合实验。
+`python train.py --check` 只检查模型结构和显示训练参数，不开始训练，也不验证数据集或 GPU。
+训练启动后还会检查训练器实际构建的模型，并将入口、模型 YAML、数据 YAML 和 Git/环境信息保存在实验目录的 `source_snapshot/`。
+
+验证入口拒绝错误模型及保存配置快照：
+
+```bash
+python -m pytest checks/test_scsa.py checks/test_train_entrypoint.py -v -o addopts=
+```
 
 此次检查证明启用和梯度路径有效，不衡量 mAP，不代替真实数据训练、GPU/AMP 稳定性测试或消融实验。
 历史目录名包含 SCSA 不能单独证明当时启用了注意力；旧结果先保留，待核对对应权重和训练时配置。

@@ -1,0 +1,914 @@
+{
+  "runtime": {
+    "torch": "2.0.1+cpu",
+    "device": "cpu"
+  },
+  "checkpoints": {
+    "best.pt": {
+      "sha256": "d925eb6d419f35c97faf5ff9552f155a2271397d360104a9ca0c85df1f736d8d",
+      "stored_epoch": -1,
+      "optimizer_present": false,
+      "date": "2026-10-18T11:42:51.095183",
+      "version": "8.0.237",
+      "module_counts": {
+        "scsa": 8,
+        "hsfpn_ca": 5,
+        "upsample": 2
+      },
+      "active_scsa_blocks": 8,
+      "parameters": 19281196,
+      "all_parameters_finite": true,
+      "train_results_match_csv": true,
+      "train_results_epochs": 300,
+      "train_args": {
+        "task": "detect",
+        "mode": "train",
+        "model": "ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml",
+        "data": "SVRDD.yaml",
+        "epochs": 300,
+        "time": null,
+        "patience": 50,
+        "batch": 16,
+        "imgsz": 640,
+        "save": true,
+        "save_period": -1,
+        "cache": false,
+        "device": "0",
+        "workers": 4,
+        "project": "/autodl-fs/data/RT-DETR/runs",
+        "name": "resnet18-HSFPN+SCSAEnable",
+        "exist_ok": false,
+        "pretrained": true,
+        "optimizer": "AdamW",
+        "verbose": true,
+        "seed": 0,
+        "deterministic": true,
+        "single_cls": false,
+        "rect": false,
+        "cos_lr": false,
+        "close_mosaic": 10,
+        "resume": false,
+        "amp": false,
+        "fraction": 1.0,
+        "profile": false,
+        "freeze": null,
+        "multi_scale": false,
+        "overlap_mask": true,
+        "mask_ratio": 4,
+        "dropout": 0.0,
+        "val": true,
+        "split": "val",
+        "save_json": false,
+        "save_hybrid": false,
+        "conf": null,
+        "iou": 0.7,
+        "max_det": 300,
+        "half": false,
+        "dnn": false,
+        "plots": true,
+        "source": null,
+        "vid_stride": 1,
+        "stream_buffer": false,
+        "visualize": false,
+        "augment": false,
+        "agnostic_nms": false,
+        "classes": null,
+        "retina_masks": false,
+        "embed": null,
+        "show": false,
+        "save_frames": false,
+        "save_txt": false,
+        "save_conf": false,
+        "save_crop": false,
+        "show_labels": true,
+        "show_conf": true,
+        "show_boxes": true,
+        "line_width": null,
+        "format": "torchscript",
+        "keras": false,
+        "optimize": false,
+        "int8": false,
+        "dynamic": false,
+        "simplify": false,
+        "opset": null,
+        "workspace": 4,
+        "nms": false,
+        "lr0": 0.0001,
+        "lrf": 1,
+        "momentum": 0.9,
+        "weight_decay": 0.0001,
+        "warmup_epochs": 2000,
+        "warmup_momentum": 0.8,
+        "warmup_bias_lr": 0.1,
+        "box": 7.5,
+        "cls": 0.5,
+        "dfl": 1.5,
+        "pose": 12.0,
+        "kobj": 1.0,
+        "label_smoothing": 0.0,
+        "nbs": 16,
+        "hsv_h": 0.015,
+        "hsv_s": 0.7,
+        "hsv_v": 0.4,
+        "degrees": 0.0,
+        "translate": 0.1,
+        "scale": 0.5,
+        "shear": 0.0,
+        "perspective": 0.0,
+        "flipud": 0.0,
+        "fliplr": 0.5,
+        "mosaic": 0.0,
+        "mixup": 0.0,
+        "copy_paste": 0.0,
+        "auto_augment": "randaugment",
+        "erasing": 0.4,
+        "crop_fraction": 1.0,
+        "cfg": null,
+        "tracker": "botsort.yaml"
+      },
+      "train_metrics": {
+        "metrics/precision(B)": 0.87381,
+        "metrics/recall(B)": 0.80808,
+        "metrics/mAP50(B)": 0.87464,
+        "metrics/mAP50-95(B)": 0.58987,
+        "val/giou_loss": 1.12841,
+        "val/cls_loss": 0.32864,
+        "val/l1_loss": 0.11742,
+        "fitness": 0.61835
+      },
+      "model_yaml": {
+        "nc": 7,
+        "scales": {
+          "l": [
+            1.0,
+            1.0,
+            1024
+          ]
+        },
+        "backbone": [
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              32,
+              3,
+              2,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              32,
+              3,
+              1,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              64,
+              3,
+              1,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "nn.MaxPool2d",
+            [
+              3,
+              2,
+              1
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              64,
+              "BasicBlock_SCSA",
+              2,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              128,
+              "BasicBlock_SCSA",
+              3,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              256,
+              "BasicBlock_SCSA",
+              4,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              512,
+              "BasicBlock_SCSA",
+              5,
+              true
+            ]
+          ]
+        ],
+        "head": [
+          [
+            -1,
+            1,
+            "GSConv",
+            [
+              256,
+              1,
+              1,
+              "None",
+              1,
+              1,
+              false
+            ]
+          ],
+          [
+            -1,
+            1,
+            "AIFI",
+            [
+              1024,
+              8
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            6,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            11,
+            1,
+            "nn.ConvTranspose2d",
+            [
+              256,
+              3,
+              2,
+              1,
+              1
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            [
+              4,
+              false
+            ]
+          ],
+          [
+            [
+              -1,
+              14
+            ],
+            1,
+            "multiply",
+            []
+          ],
+          [
+            [
+              -1,
+              15
+            ],
+            1,
+            "Add",
+            []
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            5,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            15,
+            1,
+            "nn.ConvTranspose2d",
+            [
+              256,
+              3,
+              2,
+              1,
+              1
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            [
+              4,
+              false
+            ]
+          ],
+          [
+            [
+              -1,
+              21
+            ],
+            1,
+            "multiply",
+            []
+          ],
+          [
+            [
+              -1,
+              22
+            ],
+            1,
+            "Add",
+            []
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            [
+              26,
+              19,
+              12
+            ],
+            1,
+            "RTDETRDecoder",
+            [
+              "nc",
+              256,
+              300,
+              4,
+              8,
+              3
+            ]
+          ]
+        ],
+        "scale": "",
+        "yaml_file": "ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml",
+        "ch": 3
+      },
+      "class_names": {
+        "0": "D00-纵向裂缝",
+        "1": "D10-横向裂缝",
+        "2": "D20-网状裂缝",
+        "3": "D40-坑槽",
+        "4": "D43-斑马线模糊",
+        "5": "D44-井盖",
+        "6": "D50-修补"
+      },
+      "structure_matches_archived_yaml": true,
+      "runtime_640": {
+        "shape": [
+          1,
+          300,
+          11
+        ],
+        "finite": true,
+        "module_calls": {
+          "model.4.blocks.0.se": 1,
+          "model.4.blocks.1.se": 1,
+          "model.5.blocks.0.se": 1,
+          "model.5.blocks.1.se": 1,
+          "model.6.blocks.0.se": 1,
+          "model.6.blocks.1.se": 1,
+          "model.7.blocks.0.se": 1,
+          "model.7.blocks.1.se": 1,
+          "model.10": 1,
+          "model.13": 1,
+          "model.16": 1,
+          "model.20": 1,
+          "model.23": 1,
+          "model.15": 1,
+          "model.22": 1
+        },
+        "disabled_scsa_max_output_difference": 0.981484591960907
+      }
+    },
+    "last.pt": {
+      "sha256": "332c7465f4d7712d0f5b0cf1dd9605cf1fe49f170549d5589e45c162fb58bae7",
+      "stored_epoch": -1,
+      "optimizer_present": false,
+      "date": "2026-10-18T11:42:51.095183",
+      "version": "8.0.237",
+      "module_counts": {
+        "scsa": 8,
+        "hsfpn_ca": 5,
+        "upsample": 2
+      },
+      "active_scsa_blocks": 8,
+      "parameters": 19281196,
+      "all_parameters_finite": true,
+      "train_results_match_csv": true,
+      "train_results_epochs": 300,
+      "train_args": {
+        "task": "detect",
+        "mode": "train",
+        "model": "ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml",
+        "data": "SVRDD.yaml",
+        "epochs": 300,
+        "time": null,
+        "patience": 50,
+        "batch": 16,
+        "imgsz": 640,
+        "save": true,
+        "save_period": -1,
+        "cache": false,
+        "device": "0",
+        "workers": 4,
+        "project": "/autodl-fs/data/RT-DETR/runs",
+        "name": "resnet18-HSFPN+SCSAEnable",
+        "exist_ok": false,
+        "pretrained": true,
+        "optimizer": "AdamW",
+        "verbose": true,
+        "seed": 0,
+        "deterministic": true,
+        "single_cls": false,
+        "rect": false,
+        "cos_lr": false,
+        "close_mosaic": 10,
+        "resume": false,
+        "amp": false,
+        "fraction": 1.0,
+        "profile": false,
+        "freeze": null,
+        "multi_scale": false,
+        "overlap_mask": true,
+        "mask_ratio": 4,
+        "dropout": 0.0,
+        "val": true,
+        "split": "val",
+        "save_json": false,
+        "save_hybrid": false,
+        "conf": null,
+        "iou": 0.7,
+        "max_det": 300,
+        "half": false,
+        "dnn": false,
+        "plots": true,
+        "source": null,
+        "vid_stride": 1,
+        "stream_buffer": false,
+        "visualize": false,
+        "augment": false,
+        "agnostic_nms": false,
+        "classes": null,
+        "retina_masks": false,
+        "embed": null,
+        "show": false,
+        "save_frames": false,
+        "save_txt": false,
+        "save_conf": false,
+        "save_crop": false,
+        "show_labels": true,
+        "show_conf": true,
+        "show_boxes": true,
+        "line_width": null,
+        "format": "torchscript",
+        "keras": false,
+        "optimize": false,
+        "int8": false,
+        "dynamic": false,
+        "simplify": false,
+        "opset": null,
+        "workspace": 4,
+        "nms": false,
+        "lr0": 0.0001,
+        "lrf": 1,
+        "momentum": 0.9,
+        "weight_decay": 0.0001,
+        "warmup_epochs": 2000,
+        "warmup_momentum": 0.8,
+        "warmup_bias_lr": 0.1,
+        "box": 7.5,
+        "cls": 0.5,
+        "dfl": 1.5,
+        "pose": 12.0,
+        "kobj": 1.0,
+        "label_smoothing": 0.0,
+        "nbs": 16,
+        "hsv_h": 0.015,
+        "hsv_s": 0.7,
+        "hsv_v": 0.4,
+        "degrees": 0.0,
+        "translate": 0.1,
+        "scale": 0.5,
+        "shear": 0.0,
+        "perspective": 0.0,
+        "flipud": 0.0,
+        "fliplr": 0.5,
+        "mosaic": 0.0,
+        "mixup": 0.0,
+        "copy_paste": 0.0,
+        "auto_augment": "randaugment",
+        "erasing": 0.4,
+        "crop_fraction": 1.0,
+        "cfg": null,
+        "tracker": "botsort.yaml"
+      },
+      "train_metrics": {
+        "metrics/precision(B)": 0.87381,
+        "metrics/recall(B)": 0.80808,
+        "metrics/mAP50(B)": 0.87464,
+        "metrics/mAP50-95(B)": 0.58987,
+        "val/giou_loss": 1.12841,
+        "val/cls_loss": 0.32864,
+        "val/l1_loss": 0.11742,
+        "fitness": 0.61835
+      },
+      "model_yaml": {
+        "nc": 7,
+        "scales": {
+          "l": [
+            1.0,
+            1.0,
+            1024
+          ]
+        },
+        "backbone": [
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              32,
+              3,
+              2,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              32,
+              3,
+              1,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "ConvNormLayer",
+            [
+              64,
+              3,
+              1,
+              1,
+              "relu"
+            ]
+          ],
+          [
+            -1,
+            1,
+            "nn.MaxPool2d",
+            [
+              3,
+              2,
+              1
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              64,
+              "BasicBlock_SCSA",
+              2,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              128,
+              "BasicBlock_SCSA",
+              3,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              256,
+              "BasicBlock_SCSA",
+              4,
+              true
+            ]
+          ],
+          [
+            -1,
+            2,
+            "Blocks",
+            [
+              512,
+              "BasicBlock_SCSA",
+              5,
+              true
+            ]
+          ]
+        ],
+        "head": [
+          [
+            -1,
+            1,
+            "GSConv",
+            [
+              256,
+              1,
+              1,
+              "None",
+              1,
+              1,
+              false
+            ]
+          ],
+          [
+            -1,
+            1,
+            "AIFI",
+            [
+              1024,
+              8
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            6,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            11,
+            1,
+            "nn.ConvTranspose2d",
+            [
+              256,
+              3,
+              2,
+              1,
+              1
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            [
+              4,
+              false
+            ]
+          ],
+          [
+            [
+              -1,
+              14
+            ],
+            1,
+            "multiply",
+            []
+          ],
+          [
+            [
+              -1,
+              15
+            ],
+            1,
+            "Add",
+            []
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            5,
+            1,
+            "CA",
+            []
+          ],
+          [
+            -1,
+            1,
+            "nn.Conv2d",
+            [
+              256,
+              1
+            ]
+          ],
+          [
+            15,
+            1,
+            "nn.ConvTranspose2d",
+            [
+              256,
+              3,
+              2,
+              1,
+              1
+            ]
+          ],
+          [
+            -1,
+            1,
+            "CA",
+            [
+              4,
+              false
+            ]
+          ],
+          [
+            [
+              -1,
+              21
+            ],
+            1,
+            "multiply",
+            []
+          ],
+          [
+            [
+              -1,
+              22
+            ],
+            1,
+            "Add",
+            []
+          ],
+          [
+            -1,
+            3,
+            "RepC3",
+            [
+              256,
+              0.5
+            ]
+          ],
+          [
+            [
+              26,
+              19,
+              12
+            ],
+            1,
+            "RTDETRDecoder",
+            [
+              "nc",
+              256,
+              300,
+              4,
+              8,
+              3
+            ]
+          ]
+        ],
+        "scale": "",
+        "yaml_file": "ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml",
+        "ch": 3
+      },
+      "class_names": {
+        "0": "D00-纵向裂缝",
+        "1": "D10-横向裂缝",
+        "2": "D20-网状裂缝",
+        "3": "D40-坑槽",
+        "4": "D43-斑马线模糊",
+        "5": "D44-井盖",
+        "6": "D50-修补"
+      },
+      "structure_matches_archived_yaml": true
+    }
+  }
+}

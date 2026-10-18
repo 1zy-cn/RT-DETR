@@ -1,0 +1,152 @@
+{
+  "captured_at_utc": "2026-10-18T04:31:38.098917+00:00",
+  "source_root": "/autodl-fs/data/RT-DETR",
+  "source_run": "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable",
+  "capture_branch": "main",
+  "capture_commit": "7dce80eea33287e7b813676bc4e5bc196576bff1",
+  "capture_working_tree": "M train.py",
+  "training_source_note": "Current source captured after training; train.py has uncommitted changes. Training-time Git SHA was not saved independently.",
+  "epochs": 300,
+  "last_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1488,
+    "train/cls_loss": 0.3236,
+    "train/l1_loss": 0.11281,
+    "metrics/precision(B)": 0.87381,
+    "metrics/recall(B)": 0.80808,
+    "metrics/mAP50(B)": 0.87464,
+    "metrics/mAP50-95(B)": 0.58987,
+    "val/giou_loss": 1.1284,
+    "val/cls_loss": 0.32864,
+    "val/l1_loss": 0.11742,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "best_map5095_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1488,
+    "train/cls_loss": 0.3236,
+    "train/l1_loss": 0.11281,
+    "metrics/precision(B)": 0.87381,
+    "metrics/recall(B)": 0.80808,
+    "metrics/mAP50(B)": 0.87464,
+    "metrics/mAP50-95(B)": 0.58987,
+    "val/giou_loss": 1.1284,
+    "val/cls_loss": 0.32864,
+    "val/l1_loss": 0.11742,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "best_fitness_row": {
+    "epoch": 300.0,
+    "train/giou_loss": 1.1488,
+    "train/cls_loss": 0.3236,
+    "train/l1_loss": 0.11281,
+    "metrics/precision(B)": 0.87381,
+    "metrics/recall(B)": 0.80808,
+    "metrics/mAP50(B)": 0.87464,
+    "metrics/mAP50-95(B)": 0.58987,
+    "val/giou_loss": 1.1284,
+    "val/cls_loss": 0.32864,
+    "val/l1_loss": 0.11742,
+    "lr/pg0": 0.0001,
+    "lr/pg1": 0.0001,
+    "lr/pg2": 0.0001
+  },
+  "raw_files": {
+    "run/args.yaml": {
+      "sha256": "ad10099524d7f1c465ba7979d0a3b0cb1ee3778999a7ba14053daf9e3818a60b",
+      "bytes": 1640
+    },
+    "run/results.csv": {
+      "sha256": "3086f3c39ae15371f3eb3f906e2332a04db6965732fe299e985b2f070c6194e7",
+      "bytes": 101136
+    },
+    "run/results.png": {
+      "sha256": "dfff4524e11e35ae86af40ca3110252b1662bf4bb55d3d503b69bcc49f9bef56",
+      "bytes": 262843
+    },
+    "run/PR_curve.png": {
+      "sha256": "4c31f82078a222eca377433c3b13292691d3753f0ce45f0863ee44d8f11d2a16",
+      "bytes": 219389
+    },
+    "run/P_curve.png": {
+      "sha256": "5cf40c70d3b3ca2a19cda3abba479694e260fc780721e21e878c4b02953033a3",
+      "bytes": 216633
+    },
+    "run/R_curve.png": {
+      "sha256": "fa7f213224cff2426c9537c96d5e6c5639bee000fd38570e0c72101d7f0e5840",
+      "bytes": 205003
+    },
+    "run/F1_curve.png": {
+      "sha256": "ea2d5034178a99b488278eda8797b4d39a945780de5d241e5e4bed889b86ee57",
+      "bytes": 254100
+    },
+    "run/tensorboard/events.out.tfevents.1792237222.autodl-container-ed704cb20a-1c706a86.1601.0": {
+      "sha256": "e599422deaf9abb6ffc9782f62bb7a861661c90e923dfb8a6cb9d9877c4c4d39",
+      "bytes": 201165
+    },
+    "source_snapshot/train.py": {
+      "sha256": "9a607823e3ec5df80ff9e8c7f3e8e5c1f87db2b60886c9451efa5b2943bb5b71",
+      "bytes": 832
+    },
+    "source_snapshot/SVRDD.yaml": {
+      "sha256": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead",
+      "bytes": 306
+    },
+    "source_snapshot/model.yaml": {
+      "sha256": "2f42ff8c5189087e0805b5d14287917f22c4490f8584b6abe0a1e18d1dfbf1da",
+      "bytes": 1832
+    },
+    "source_snapshot/trainer.py": {
+      "sha256": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53",
+      "bytes": 32716
+    }
+  },
+  "source_hashes": {
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/args.yaml": "ad10099524d7f1c465ba7979d0a3b0cb1ee3778999a7ba14053daf9e3818a60b",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/results.csv": "3086f3c39ae15371f3eb3f906e2332a04db6965732fe299e985b2f070c6194e7",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/results.png": "dfff4524e11e35ae86af40ca3110252b1662bf4bb55d3d503b69bcc49f9bef56",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/PR_curve.png": "4c31f82078a222eca377433c3b13292691d3753f0ce45f0863ee44d8f11d2a16",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/P_curve.png": "5cf40c70d3b3ca2a19cda3abba479694e260fc780721e21e878c4b02953033a3",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/R_curve.png": "fa7f213224cff2426c9537c96d5e6c5639bee000fd38570e0c72101d7f0e5840",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/F1_curve.png": "ea2d5034178a99b488278eda8797b4d39a945780de5d241e5e4bed889b86ee57",
+    "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/events.out.tfevents.1792237222.autodl-container-ed704cb20a-1c706a86.1601.0": "e599422deaf9abb6ffc9782f62bb7a861661c90e923dfb8a6cb9d9877c4c4d39",
+    "/autodl-fs/data/RT-DETR/train.py": "9a607823e3ec5df80ff9e8c7f3e8e5c1f87db2b60886c9451efa5b2943bb5b71",
+    "/autodl-fs/data/RT-DETR/SVRDD.yaml": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead",
+    "/autodl-fs/data/RT-DETR/ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml": "2f42ff8c5189087e0805b5d14287917f22c4490f8584b6abe0a1e18d1dfbf1da",
+    "/autodl-fs/data/RT-DETR/ultralytics/engine/trainer.py": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53"
+  },
+  "dataset_file_counts_at_capture": {
+    "train": {
+      "images": 7393,
+      "labels": 7393
+    },
+    "valid": {
+      "images": 2049,
+      "labels": 2049
+    },
+    "test": {
+      "images": 2056,
+      "labels": 2056
+    }
+  },
+  "control_csv_hashes_at_capture": {
+    "rtdetr-resnet18": "4c01cb6e617ac79898985410f549218a050fde276c35213d030f342e4bb1a8cb",
+    "rtdetr-resnet18-HSFPN": "8f1acfb0a291bf6a6f51bb4eebff6303d821dd742b5700d77459bfb182d8f22c"
+  },
+  "weights": {
+    "best.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/weights/best.pt",
+      "bytes": 38909938,
+      "sha256": "d925eb6d419f35c97faf5ff9552f155a2271397d360104a9ca0c85df1f736d8d"
+    },
+    "last.pt": {
+      "server_path": "/autodl-fs/data/RT-DETR/runs/resnet18-HSFPN+SCSAEnable/weights/last.pt",
+      "bytes": 38909938,
+      "sha256": "332c7465f4d7712d0f5b0cf1dd9605cf1fe49f170549d5589e45c162fb58bae7"
+    }
+  }
+}
