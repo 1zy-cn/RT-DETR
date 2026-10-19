@@ -78,3 +78,21 @@ def multi_scale_deformable_attn_pytorch(value: torch.Tensor, value_spatial_shape
     output = ((torch.stack(sampling_value_list, dim=-2).flatten(-2) * attention_weights).sum(-1).view(
         bs, num_heads * embed_dims, num_queries))
     return output.transpose(1, 2).contiguous()
+
+
+def multi_scale_deformable_attn_pytorch_scale_aware(value, value_spatial_shapes, sampling_locations,
+                                                     attention_weights, point_counts):
+    """Grid-sample a different number of decoder points from each feature level."""
+    bs, _, heads, channels = value.shape
+    queries = sampling_locations.shape[1]
+    value_levels = value.split([h * w for h, w in value_spatial_shapes], dim=1)
+    grid_levels = (2 * sampling_locations - 1).split(point_counts, dim=3)
+    sampled = []
+    for (h, w), features, grid in zip(value_spatial_shapes, value_levels, grid_levels):
+        features = features.flatten(2).transpose(1, 2).reshape(bs * heads, channels, h, w)
+        grid = grid.transpose(1, 2).flatten(0, 1)
+        sampled.append(F.grid_sample(features, grid, mode='bilinear', padding_mode='zeros',
+                                     align_corners=False))
+    weights = attention_weights.transpose(1, 2).reshape(bs * heads, 1, queries, sum(point_counts))
+    return ((torch.cat(sampled, dim=-1) * weights).sum(-1).view(bs, heads * channels, queries)
+            .transpose(1, 2).contiguous())

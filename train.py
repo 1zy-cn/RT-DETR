@@ -20,6 +20,8 @@ from ultralytics import RTDETR
 from ultralytics.nn.Addmodules.HSFPN import CA
 from ultralytics.nn.Addmodules.SCSA import BasicBlock_SCSA, SCSA
 from ultralytics.nn.Addmodules.FreqFusion import FreqFusionConcat
+from ultralytics.nn.Addmodules.Dysample import Dy_Sample
+from ultralytics.nn.Addmodules.FDConv import FDConv
 from ultralytics.utils.torch_utils import de_parallel
 
 
@@ -42,6 +44,38 @@ EXPERIMENTS = {
         'project': '/root/autodl-fs/RT-DETR-HSFPN-SCSA-runs',
     },
 }
+_CANDIDATE_FACTORS = {
+    'baseline': (),
+    'scsa': ('scsa',),
+    'freqfusion': ('freqfusion',),
+    'scale-decoder': ('scale-decoder',),
+    'scsa-freqfusion': ('scsa', 'freqfusion'),
+    'scsa-scale-decoder': ('scsa', 'scale-decoder'),
+    'freqfusion-scale-decoder': ('freqfusion', 'scale-decoder'),
+    'scsa-freqfusion-scale-decoder': ('scsa', 'freqfusion', 'scale-decoder'),
+    'dysample': ('dysample',),
+    'fdconv-c4': ('fdconv-c4',),
+    'scsa-dysample': ('scsa', 'dysample'),
+    'scsa-fdconv-c4': ('scsa', 'fdconv-c4'),
+    'dysample-fdconv-c4': ('dysample', 'fdconv-c4'),
+    'scsa-dysample-fdconv-c4': ('scsa', 'dysample', 'fdconv-c4'),
+}
+_EXISTING_YAMLS = {
+    'baseline': 'rtdetr-resnet18.yaml',
+    'scsa': 'rtdetr-resnet18-SCSA.yaml',
+    'freqfusion': 'rtdetr-resnet18-FreqFusion-P3.yaml',
+    'scsa-freqfusion': 'rtdetr-resnet18-SCSA-FreqFusion-P3.yaml',
+    'dysample': 'rtdetr-resnet18-DySample.yaml',
+}
+for _name, _factors in _CANDIDATE_FACTORS.items():
+    if _name not in EXPERIMENTS:
+        EXPERIMENTS[_name] = {
+            'model': MODEL_YAML.parent / _EXISTING_YAMLS.get(_name, f'rtdetr-resnet18-{_name}.yaml'),
+            'name': f'rtdetr-resnet18-{_name}-s0',
+            'scsa': 8 if 'scsa' in _factors else 0,
+            'project': str(ROOT / 'runs/thesis-candidates'),
+        }
+    EXPERIMENTS[_name]['factors'] = _factors
 TRAIN_ARGS = dict(
     data=str(DATA_YAML),
     cache=False,
@@ -67,12 +101,19 @@ TRAIN_ARGS = dict(
 )
 
 
-def training_args(experiment, data=None, project=None, device='0'):
-    """One shared protocol; only the model-specific run name changes for FreqFusion."""
+def training_args(experiment, data=None, project=None, device='0', overrides=None):
+    """Keep one full-training protocol across the candidate ablation matrix."""
     settings = EXPERIMENTS[experiment]
-    return {**TRAIN_ARGS, 'data': str(data if data is not None else DATA_YAML),
+    args = {**TRAIN_ARGS, 'data': str(data if data is not None else DATA_YAML),
             'project': str(project if project is not None else settings['project']),
             'name': settings['name'], 'device': device}
+    allowed = {'epochs', 'batch', 'imgsz', 'workers', 'warmup_epochs', 'plots'}
+    if overrides:
+        unknown = set(overrides) - allowed
+        if unknown:
+            raise ValueError(f'Unsupported training overrides: {sorted(unknown)}')
+        args.update(overrides)
+    return args
 
 
 def verify_model(model, experiment='hsfpn-scsa'):
@@ -81,21 +122,38 @@ def verify_model(model, experiment='hsfpn-scsa'):
     model = de_parallel(model)
     modules = list(model.modules())
     blocks = [m for m in modules if isinstance(m, BasicBlock_SCSA)]
+    points = model.model[-1].decoder.layers[0].cross_attn.n_points
+    points = (points,) * 3 if isinstance(points, int) else tuple(points)
     counts = {
         'scsa_modules': sum(isinstance(m, SCSA) for m in modules),
         'hsfpn_ca_modules': sum(isinstance(m, CA) for m in modules),
         'transpose_convolutions': sum(isinstance(m, torch.nn.ConvTranspose2d) for m in modules),
         'freqfusion_modules': sum(isinstance(m, FreqFusionConcat) for m in modules),
+        'dysample_modules': sum(isinstance(m, Dy_Sample) for m in modules),
+        'fdconv_modules': sum(isinstance(m, FDConv) for m in modules),
+        'decoder_points': points,
     }
     legacy = experiment == 'hsfpn-scsa'
-    expected = {'scsa_modules': settings['scsa'], 'hsfpn_ca_modules': 5 if legacy else 0,
-                'transpose_convolutions': 2 if legacy else 0, 'freqfusion_modules': 0 if legacy else 1}
+    factors = settings.get('factors', ())
+    expected = {
+        'scsa_modules': 8 if 'scsa' in factors or legacy else 0,
+        'hsfpn_ca_modules': 5 if legacy else 0,
+        'transpose_convolutions': 2 if legacy else 0,
+        'freqfusion_modules': int('freqfusion' in factors),
+        'dysample_modules': 2 if 'dysample' in factors else 0,
+        'fdconv_modules': int('fdconv-c4' in factors),
+        'decoder_points': (6, 4, 2) if 'scale-decoder' in factors else (4, 4, 4),
+    }
     valid = (counts == expected and len(blocks) == settings['scsa']
              and all(b.att and hasattr(b, 'se') for b in blocks))
-    if not legacy:
+    if 'freqfusion' in factors:
         fusion = [m.fusion for m in modules if isinstance(m, FreqFusionConcat)]
         valid = valid and all(m.feature_resample and m.use_high_pass and m.use_low_pass for m in fusion)
         valid = valid and model.model[17].f == [16, 15] and model.model[-1].f == [18, 21, 24]
+    if 'fdconv-c4' in factors:
+        valid = valid and isinstance(model.model[6].blocks[1].branch2b.conv, FDConv)
+    if 'dysample' in factors:
+        valid = valid and model.model[-1].f == [19, 22, 25]
     if not valid:
         label = 'HSFPN + enabled SCSA' if legacy else experiment
         raise RuntimeError(f'Expected {label}: {expected}; found {counts}. Check attention flags and P3 wiring.')
@@ -117,11 +175,20 @@ def on_train_start(trainer, experiment='hsfpn-scsa'):
     snapshot = Path(trainer.save_dir) / 'source_snapshot'
     snapshot.mkdir(parents=True, exist_ok=True)
     data_yaml = Path(getattr(trainer.args, 'data', DATA_YAML))
+    factors = EXPERIMENTS[experiment].get('factors', ())
     sources = [Path(__file__).resolve(), EXPERIMENTS[experiment]['model'], data_yaml,
                ROOT / 'ultralytics/nn/tasks.py', ROOT / 'ultralytics/engine/trainer.py',
+               ROOT / 'ultralytics/nn/modules/transformer.py', ROOT / 'ultralytics/nn/modules/utils.py',
+               ROOT / 'ultralytics/nn/Addmodules/__init__.py',
                ROOT / 'ultralytics/nn/Addmodules/ResNet.py', ROOT / 'ultralytics/nn/Addmodules/SCSA.py']
-    if experiment != 'hsfpn-scsa':
+    if 'freqfusion' in factors:
         sources.append(ROOT / 'ultralytics/nn/Addmodules/FreqFusion.py')
+    if 'dysample' in factors:
+        sources.append(ROOT / 'ultralytics/nn/Addmodules/Dysample.py')
+    if 'fdconv-c4' in factors:
+        sources.extend([ROOT / 'ultralytics/nn/Addmodules/FDConv.py',
+                        ROOT / 'ultralytics/nn/Addmodules/FDConvResNet.py',
+                        ROOT / 'ultralytics/nn/Addmodules/FDConv-LICENSE.txt'])
     for source in sources:
         shutil.copy2(source, snapshot / source.name)
     metadata = {
@@ -130,7 +197,7 @@ def on_train_start(trainer, experiment='hsfpn-scsa'):
         'git_status': git_info('status', '--porcelain=v1'),
         'initialization': 'random_from_yaml; no checkpoint loaded',
         'experiment': experiment,
-        'freqfusion_backend': 'torch_reflect' if experiment != 'hsfpn-scsa' else None,
+        'freqfusion_backend': 'torch_reflect' if 'freqfusion' in factors else None,
         'source_sha256': {source.name: hashlib.sha256(source.read_bytes()).hexdigest() for source in sources},
         'model_check': counts,
         'model_parameters': sum(p.numel() for p in model.parameters()),
@@ -153,10 +220,22 @@ def main():
     parser.add_argument('--data', type=Path, default=DATA_YAML, help='Dataset YAML (default: repository SVRDD.yaml)')
     parser.add_argument('--project', type=Path, help='Override shared-disk output parent directory')
     parser.add_argument('--device', default='0', help='Training device, e.g. 0 or 1')
+    parser.add_argument('--epochs', type=int, help='Override epochs for a local smoke run')
+    parser.add_argument('--batch', type=int, help='Override batch for a local smoke run')
+    parser.add_argument('--imgsz', type=int, help='Override image size for a local smoke run')
+    parser.add_argument('--workers', type=int, help='Override dataloader workers for a local smoke run')
+    parser.add_argument('--warmup-iterations', type=int,
+                        help='Override warmup iterations (this fork stores them as warmup_epochs)')
+    parser.add_argument('--no-plots', action='store_true', help='Disable matplotlib plots for a smoke run')
     options = parser.parse_args()
+    overrides = {key: value for key, value in {
+        'epochs': options.epochs, 'batch': options.batch, 'imgsz': options.imgsz,
+        'workers': options.workers, 'warmup_epochs': options.warmup_iterations,
+        'plots': False if options.no_plots else None}.items()
+        if value is not None}
     args = training_args(options.experiment, data=options.data.expanduser().resolve(),
                          project=options.project.expanduser().resolve() if options.project else None,
-                         device=options.device)
+                         device=options.device, overrides=overrides)
     model_yaml = EXPERIMENTS[options.experiment]['model']
     os.chdir(ROOT)
     # Build from YAML without model.load(): do not resume or fine-tune old experiments.

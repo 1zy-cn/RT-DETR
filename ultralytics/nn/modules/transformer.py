@@ -9,7 +9,8 @@ import torch.nn.functional as F
 from torch.nn.init import constant_, xavier_uniform_
 
 from .conv import Conv
-from .utils import _get_clones, inverse_sigmoid, multi_scale_deformable_attn_pytorch
+from .utils import (_get_clones, inverse_sigmoid, multi_scale_deformable_attn_pytorch,
+                    multi_scale_deformable_attn_pytorch_scale_aware)
 
 __all__ = ('TransformerEncoderLayer', 'TransformerLayer', 'TransformerBlock', 'MLPBlock', 'LayerNorm2d', 'AIFI',
            'DeformableTransformerDecoder', 'DeformableTransformerDecoderLayer', 'MSDeformAttn', 'MLP')
@@ -224,9 +225,14 @@ class MSDeformAttn(nn.Module):
         self.n_levels = n_levels
         self.n_heads = n_heads
         self.n_points = n_points
+        self.scale_aware = isinstance(n_points, (list, tuple))
+        self.point_counts = tuple(n_points) if self.scale_aware else (n_points,) * n_levels
+        if len(self.point_counts) != n_levels or any(not isinstance(n, int) or n < 1 for n in self.point_counts):
+            raise ValueError(f'Expected {n_levels} positive decoder point counts, got {n_points}')
+        self.total_points = sum(self.point_counts)
 
-        self.sampling_offsets = nn.Linear(d_model, n_heads * n_levels * n_points * 2)
-        self.attention_weights = nn.Linear(d_model, n_heads * n_levels * n_points)
+        self.sampling_offsets = nn.Linear(d_model, n_heads * self.total_points * 2)
+        self.attention_weights = nn.Linear(d_model, n_heads * self.total_points)
         self.value_proj = nn.Linear(d_model, d_model)
         self.output_proj = nn.Linear(d_model, d_model)
 
@@ -237,10 +243,15 @@ class MSDeformAttn(nn.Module):
         constant_(self.sampling_offsets.weight.data, 0.)
         thetas = torch.arange(self.n_heads, dtype=torch.float32) * (2.0 * math.pi / self.n_heads)
         grid_init = torch.stack([thetas.cos(), thetas.sin()], -1)
-        grid_init = (grid_init / grid_init.abs().max(-1, keepdim=True)[0]).view(self.n_heads, 1, 1, 2).repeat(
-            1, self.n_levels, self.n_points, 1)
-        for i in range(self.n_points):
-            grid_init[:, :, i, :] *= i + 1
+        grid_init = grid_init / grid_init.abs().max(-1, keepdim=True)[0]
+        if self.scale_aware:
+            grid_init = grid_init.view(self.n_heads, 1, 2).repeat(1, self.total_points, 1)
+            radii = torch.cat([torch.arange(1, n + 1) for n in self.point_counts])
+            grid_init *= radii.view(1, -1, 1)
+        else:
+            grid_init = grid_init.view(self.n_heads, 1, 1, 2).repeat(1, self.n_levels, self.n_points, 1)
+            for i in range(self.n_points):
+                grid_init[:, :, i, :] *= i + 1
         with torch.no_grad():
             self.sampling_offsets.bias = nn.Parameter(grid_init.view(-1))
         constant_(self.attention_weights.weight.data, 0.)
@@ -275,6 +286,30 @@ class MSDeformAttn(nn.Module):
         if value_mask is not None:
             value = value.masked_fill(value_mask[..., None], float(0))
         value = value.view(bs, len_v, self.n_heads, self.d_model // self.n_heads)
+        if self.scale_aware:
+            sampling_offsets = self.sampling_offsets(query).view(bs, len_q, self.n_heads, self.total_points, 2)
+            attention_weights = F.softmax(
+                self.attention_weights(query).view(bs, len_q, self.n_heads, self.total_points), -1)
+            reference = refer_bbox.expand(-1, -1, self.n_levels, -1).repeat_interleave(
+                torch.tensor(self.point_counts, device=query.device), dim=2)
+            num_points = reference.shape[-1]
+            if num_points == 2:
+                normalizer = torch.as_tensor(value_shapes, dtype=query.dtype, device=query.device).flip(-1)
+                normalizer = normalizer.repeat_interleave(
+                    torch.tensor(self.point_counts, device=query.device), dim=0)
+                sampling_locations = reference[:, :, None, :, :] + sampling_offsets / normalizer
+            elif num_points == 4:
+                point_scale = torch.as_tensor(
+                    [1 / n for n in self.point_counts for _ in range(n)], dtype=query.dtype,
+                    device=query.device).view(1, 1, 1, self.total_points, 1)
+                sampling_locations = (reference[:, :, None, :, :2] + sampling_offsets * point_scale *
+                                      reference[:, :, None, :, 2:] * 0.5)
+            else:
+                raise ValueError(f'Last dim of reference_points must be 2 or 4, but got {num_points}.')
+            output = multi_scale_deformable_attn_pytorch_scale_aware(
+                value, value_shapes, sampling_locations, attention_weights, self.point_counts)
+            return self.output_proj(output)
+
         sampling_offsets = self.sampling_offsets(query).view(bs, len_q, self.n_heads, self.n_levels, self.n_points, 2)
         attention_weights = self.attention_weights(query).view(bs, len_q, self.n_heads, self.n_levels * self.n_points)
         attention_weights = F.softmax(attention_weights, -1).view(bs, len_q, self.n_heads, self.n_levels, self.n_points)

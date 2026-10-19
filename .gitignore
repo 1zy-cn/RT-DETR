@@ -138,6 +138,7 @@ dmypy.json
 
 # datasets and projects
 datasets/
+.pytest_temp/
 runs/
 wandb/
 tests/
