@@ -12,6 +12,8 @@ The completed HSFPN + enabled SCSA run is archived in the [2026-10-18 combinatio
 
 The original upstream README and LICENSE are preserved. Datasets, checkpoints and live runs remain on the AutoDL server.
 
+后续选题与实验量规划见 [论文候选改进点备忘录](docs/experiments/2026-10-19-thesis-candidate-roadmap.md)。其中的候选方案均待验证，不能当作已完成的实验结论。
+
 ## 当前实验：FreqFusion 与 SCSA＋FreqFusion
 
 两份配置均只改生成 P3 的融合位置，保留原 RT-DETR 双向融合路径；SCSA 组合含 8 个有效注意力模块。统一使用 batch=8、300轮、640输入、seed=0，从 YAML 随机初始化。
