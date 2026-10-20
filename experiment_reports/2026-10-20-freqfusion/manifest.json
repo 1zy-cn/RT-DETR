@@ -1,0 +1,134 @@
+{
+  "purpose": "Completed SVRDD 300-epoch P3 FreqFusion ablation results",
+  "runs": {
+    "rtdetr-resnet18-FreqFusion-P3-s0": {
+      "epochs": 300,
+      "best_epoch_by_map50_95": 300,
+      "best_map50_95": 0.60379,
+      "best_map50": 0.86461,
+      "last_map50_95": 0.60379,
+      "last_map50": 0.86461,
+      "source_git_commit": "3df309f044733a4b3c4c9488920c38e57877baad",
+      "model_check": {
+        "scsa_modules": 0,
+        "hsfpn_ca_modules": 0,
+        "transpose_convolutions": 0,
+        "freqfusion_modules": 1
+      },
+      "training_args": {
+        "epochs": 300,
+        "batch": 8,
+        "imgsz": 640,
+        "optimizer": "AdamW",
+        "lr0": 0.0001,
+        "lrf": 1.0,
+        "cos_lr": false,
+        "weight_decay": 0.0001,
+        "warmup_epochs": 2000,
+        "close_mosaic": 10,
+        "seed": 0,
+        "amp": false
+      },
+      "checkpoints_not_uploaded": {
+        "best": {
+          "sha256": "775fa64cc47e9a22c257b0552a9ee1a2708925413e3fb47bd913f24dd406a410",
+          "bytes": 40721191,
+          "server_path": "/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-FreqFusion-P3-s0/weights/best.pt"
+        },
+        "last": {
+          "sha256": "601ff4ba422f05d4b7c7bb34444c35e25062407f94f025af2f66e6b2f9c49e14",
+          "bytes": 40721191,
+          "server_path": "/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-FreqFusion-P3-s0/weights/last.pt"
+        }
+      },
+      "archived_file_sha256": {
+        "results.csv": "02711072505dcc2c356aeacd5233ed66a7cef49d60d5c28d8fbd38dd55aeb790",
+        "args.yaml": "0a1a6d8d469e346c00d8cc15ac8860481ec35a35ecf1a107a275476801f2c8dd",
+        "results.png": "2941f220b99104c1d987cdcf81b665b99c5c50362c99a3f00fb299c1bded1e78",
+        "F1_curve.png": "e3f9adb6ed5de5b39c496259ed239a278fbba3b0b4c7a408352cf9a373af886d",
+        "PR_curve.png": "813d63a49cc58c11191543947f05ff6ae1bac924a7fa9f8e4a348eb8854f31e3",
+        "P_curve.png": "5b97d462ca5f547903ca8ba7d9efdf09bb4aaf922442624a92804facfd3bc198",
+        "R_curve.png": "824944e0f9a681b9583c421d8fe470c971348a95b85e62fedcae25e00a132bf0",
+        "val_batch0_pred.jpg": "2bef56e7d2eb5579ccf7b40003f61de660658097556e06cf86573204a82af024",
+        "val_batch1_pred.jpg": "5673c87f3abd93288ffe22b643b8bc18fedde8737a4cb61a8d83d09e2ff5aa9d",
+        "val_batch2_pred.jpg": "6ebdd3aa608b9215b291dbeb3ba10752ab82de1491be1a3e56b7cfedfbee1cd6",
+        "source_snapshot/train.py": "d1a6b613ab4d3b374435cf4b010bf3c0346fb6b460011a891df4de95c90a1b9b",
+        "source_snapshot/rtdetr-resnet18-FreqFusion-P3.yaml": "fdc79766d33bb2cff8424edc4f3924b383ee2ecaa5dd62f57271d283d2248822",
+        "source_snapshot/SVRDD.yaml": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead",
+        "source_snapshot/tasks.py": "6e6e0c7881be2753916f7194b4827bb699675895716826d593b3d63d8be01568",
+        "source_snapshot/trainer.py": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53",
+        "source_snapshot/ResNet.py": "773ef375ed9d59c94bed4bb0fa05d50dde2256e783f37d250ea36d9fee4c8c4b",
+        "source_snapshot/SCSA.py": "7035ab770729cfbc5d78ff08aab9d5c1b47d11f370b4fd00ee17229fdd21204e",
+        "source_snapshot/FreqFusion.py": "7b2ad4121efabb1a501f0cc3550bc7a1e3d80f7ef536bf81f1abebe9e462f45b",
+        "source_snapshot/provenance.json": "a631e5884bebf404670b7c01fbaab87bba2519cfbcf6f367deee1f56d8804e47"
+      }
+    },
+    "rtdetr-resnet18-SCSA-FreqFusion-P3-s0": {
+      "epochs": 300,
+      "best_epoch_by_map50_95": 300,
+      "best_map50_95": 0.58983,
+      "best_map50": 0.87288,
+      "last_map50_95": 0.58983,
+      "last_map50": 0.87288,
+      "source_git_commit": "3df309f044733a4b3c4c9488920c38e57877baad",
+      "model_check": {
+        "scsa_modules": 8,
+        "hsfpn_ca_modules": 0,
+        "transpose_convolutions": 0,
+        "freqfusion_modules": 1
+      },
+      "training_args": {
+        "epochs": 300,
+        "batch": 8,
+        "imgsz": 640,
+        "optimizer": "AdamW",
+        "lr0": 0.0001,
+        "lrf": 1.0,
+        "cos_lr": false,
+        "weight_decay": 0.0001,
+        "warmup_epochs": 2000,
+        "close_mosaic": 10,
+        "seed": 0,
+        "amp": false
+      },
+      "checkpoints_not_uploaded": {
+        "best": {
+          "sha256": "2f05fe682b57cf28ee955c83e149ece691e44dbd95815b5f8bdc717e63987521",
+          "bytes": 40846783,
+          "server_path": "/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-SCSA-FreqFusion-P3-s0/weights/best.pt"
+        },
+        "last": {
+          "sha256": "eab1d4733f68728681686a375bd9b44dbc2f0fd1f59578432359865072c23822",
+          "bytes": 40846783,
+          "server_path": "/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-SCSA-FreqFusion-P3-s0/weights/last.pt"
+        }
+      },
+      "archived_file_sha256": {
+        "results.csv": "451181992769dc1fbf9687c39ac98cbaf0fb7b0b5b822d5d635abb027db467be",
+        "args.yaml": "20946a716d69ab441f72d8f8ecbe947831db9bae5b915d37134dccdb76b8e501",
+        "results.png": "336a89ecffbbc8a9a73f51a7f3ae30dce659228dff4bdd4afb3fcaed9133d013",
+        "F1_curve.png": "d54d5a6a9a936ab47532cd8c90e264a5f2df899524659ccd47a2b8dc729efdb7",
+        "PR_curve.png": "3806d77b0990dd7763a192ec9cc0695b29665688108fafe207a8f8b31310eac3",
+        "P_curve.png": "d5d8d924194e36e1474fcf2a01ea0a23af71aef7cfa35dd1277a2e03bf27e68c",
+        "R_curve.png": "d53dc346202affe59273309882e18bc867aa5eeb41dbe288db682a060223b9bc",
+        "val_batch0_pred.jpg": "4b86cf49687bbaf34ac9058ea879b6b3f811e8c2e82d4d6bd092e7a4b0e379ce",
+        "val_batch1_pred.jpg": "31133135fc5f2eb9a8113f4db38d2bb1bd7a2dc6a24cb28fc3d3046cbd2f0554",
+        "val_batch2_pred.jpg": "b541c9c3655381e9f9930ba5b585ccaf50ce9131fce991904d9a0060da65987a",
+        "source_snapshot/train.py": "d1a6b613ab4d3b374435cf4b010bf3c0346fb6b460011a891df4de95c90a1b9b",
+        "source_snapshot/rtdetr-resnet18-SCSA-FreqFusion-P3.yaml": "1fc15e81cc18499b7e003d5d3005a9d94729efe0d4fb7b94f33aa17e37bc1f10",
+        "source_snapshot/SVRDD.yaml": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead",
+        "source_snapshot/tasks.py": "6e6e0c7881be2753916f7194b4827bb699675895716826d593b3d63d8be01568",
+        "source_snapshot/trainer.py": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53",
+        "source_snapshot/ResNet.py": "773ef375ed9d59c94bed4bb0fa05d50dde2256e783f37d250ea36d9fee4c8c4b",
+        "source_snapshot/SCSA.py": "7035ab770729cfbc5d78ff08aab9d5c1b47d11f370b4fd00ee17229fdd21204e",
+        "source_snapshot/FreqFusion.py": "7b2ad4121efabb1a501f0cc3550bc7a1e3d80f7ef536bf81f1abebe9e462f45b",
+        "source_snapshot/provenance.json": "6960c8eca11c332c505c7bd8a1478c6cbd8cb1c4404d80b326244d0da7778b7f"
+      }
+    }
+  },
+  "excluded_incomplete_runs": [
+    "rtdetr-resnet18-FreqFusion-P3-s02",
+    "rtdetr-resnet18-SCSA-FreqFusion-P3-s02"
+  ],
+  "checkpoint_policy": "Weights remain on shared AutoDL storage; metrics and source snapshots are archived in Git."
+}

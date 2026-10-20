@@ -1,0 +1,440 @@
+{
+  "captured_at_utc": "2026-10-18T11:44:37.526113+00:00",
+  "git_commit": "3df309f044733a4b3c4c9488920c38e57877baad",
+  "git_status": "",
+  "initialization": "random_from_yaml; no checkpoint loaded",
+  "experiment": "freqfusion",
+  "freqfusion_backend": "torch_reflect",
+  "source_sha256": {
+    "train.py": "d1a6b613ab4d3b374435cf4b010bf3c0346fb6b460011a891df4de95c90a1b9b",
+    "rtdetr-resnet18-FreqFusion-P3.yaml": "fdc79766d33bb2cff8424edc4f3924b383ee2ecaa5dd62f57271d283d2248822",
+    "SVRDD.yaml": "df940a254b22898dcb913bdbf8ed254375ddd477aec81a7c3c46bab35796eead",
+    "tasks.py": "6e6e0c7881be2753916f7194b4827bb699675895716826d593b3d63d8be01568",
+    "trainer.py": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53",
+    "ResNet.py": "773ef375ed9d59c94bed4bb0fa05d50dde2256e783f37d250ea36d9fee4c8c4b",
+    "SCSA.py": "7035ab770729cfbc5d78ff08aab9d5c1b47d11f370b4fd00ee17229fdd21204e",
+    "FreqFusion.py": "7b2ad4121efabb1a501f0cc3550bc7a1e3d80f7ef536bf81f1abebe9e462f45b"
+  },
+  "model_check": {
+    "scsa_modules": 0,
+    "hsfpn_ca_modules": 0,
+    "transpose_convolutions": 0,
+    "freqfusion_modules": 1
+  },
+  "model_parameters": 20200094,
+  "model_yaml": {
+    "nc": 7,
+    "scales": {
+      "l": [
+        1.0,
+        1.0,
+        1024
+      ]
+    },
+    "backbone": [
+      [
+        -1,
+        1,
+        "ConvNormLayer",
+        [
+          32,
+          3,
+          2,
+          1,
+          "relu"
+        ]
+      ],
+      [
+        -1,
+        1,
+        "ConvNormLayer",
+        [
+          32,
+          3,
+          1,
+          1,
+          "relu"
+        ]
+      ],
+      [
+        -1,
+        1,
+        "ConvNormLayer",
+        [
+          64,
+          3,
+          1,
+          1,
+          "relu"
+        ]
+      ],
+      [
+        -1,
+        1,
+        "nn.MaxPool2d",
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      [
+        -1,
+        2,
+        "Blocks",
+        [
+          64,
+          "BasicBlock",
+          2,
+          false
+        ]
+      ],
+      [
+        -1,
+        2,
+        "Blocks",
+        [
+          128,
+          "BasicBlock",
+          3,
+          false
+        ]
+      ],
+      [
+        -1,
+        2,
+        "Blocks",
+        [
+          256,
+          "BasicBlock",
+          4,
+          false
+        ]
+      ],
+      [
+        -1,
+        2,
+        "Blocks",
+        [
+          512,
+          "BasicBlock",
+          5,
+          false
+        ]
+      ]
+    ],
+    "head": [
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          1,
+          1,
+          "None",
+          1,
+          1,
+          false
+        ]
+      ],
+      [
+        -1,
+        1,
+        "AIFI",
+        [
+          1024,
+          8
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          1,
+          1
+        ]
+      ],
+      [
+        -1,
+        1,
+        "nn.Upsample",
+        [
+          "None",
+          2,
+          "nearest"
+        ]
+      ],
+      [
+        6,
+        1,
+        "Conv",
+        [
+          256,
+          1,
+          1,
+          "None",
+          1,
+          1,
+          false
+        ]
+      ],
+      [
+        [
+          -2,
+          -1
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "RepC3",
+        [
+          256,
+          0.5
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          1,
+          1
+        ]
+      ],
+      [
+        5,
+        1,
+        "Conv",
+        [
+          256,
+          1,
+          1,
+          "None",
+          1,
+          1,
+          false
+        ]
+      ],
+      [
+        [
+          16,
+          15
+        ],
+        1,
+        "FreqFusionConcat",
+        [
+          64
+        ]
+      ],
+      [
+        -1,
+        3,
+        "RepC3",
+        [
+          256,
+          0.5
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          3,
+          2
+        ]
+      ],
+      [
+        [
+          -1,
+          15
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "RepC3",
+        [
+          256,
+          0.5
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          3,
+          2
+        ]
+      ],
+      [
+        [
+          -1,
+          10
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "RepC3",
+        [
+          256,
+          0.5
+        ]
+      ],
+      [
+        [
+          18,
+          21,
+          24
+        ],
+        1,
+        "RTDETRDecoder",
+        [
+          "nc",
+          256,
+          300,
+          4,
+          8,
+          3
+        ]
+      ]
+    ],
+    "scale": "",
+    "yaml_file": "/autodl-fs/data/RT-DETR/ultralytics/cfg/models/rt-detr/rtdetr-resnet18-FreqFusion-P3.yaml",
+    "ch": 3
+  },
+  "training_args": {
+    "task": "detect",
+    "mode": "train",
+    "model": "/autodl-fs/data/RT-DETR/ultralytics/cfg/models/rt-detr/rtdetr-resnet18-FreqFusion-P3.yaml",
+    "data": "/autodl-fs/data/RT-DETR/SVRDD.yaml",
+    "epochs": 300,
+    "time": null,
+    "patience": 50,
+    "batch": 8,
+    "imgsz": 640,
+    "save": true,
+    "save_period": -1,
+    "cache": false,
+    "device": "0",
+    "workers": 4,
+    "project": "/root/autodl-fs/RT-DETR-FreqFusion-runs",
+    "name": "rtdetr-resnet18-FreqFusion-P3-s0",
+    "exist_ok": false,
+    "pretrained": true,
+    "optimizer": "AdamW",
+    "verbose": true,
+    "seed": 0,
+    "deterministic": true,
+    "single_cls": false,
+    "rect": false,
+    "cos_lr": false,
+    "close_mosaic": 10,
+    "resume": false,
+    "amp": false,
+    "fraction": 1.0,
+    "profile": false,
+    "freeze": null,
+    "multi_scale": false,
+    "overlap_mask": true,
+    "mask_ratio": 4,
+    "dropout": 0.0,
+    "val": true,
+    "split": "val",
+    "save_json": false,
+    "save_hybrid": false,
+    "conf": null,
+    "iou": 0.7,
+    "max_det": 300,
+    "half": false,
+    "dnn": false,
+    "plots": true,
+    "source": null,
+    "vid_stride": 1,
+    "stream_buffer": false,
+    "visualize": false,
+    "augment": false,
+    "agnostic_nms": false,
+    "classes": null,
+    "retina_masks": false,
+    "embed": null,
+    "show": false,
+    "save_frames": false,
+    "save_txt": false,
+    "save_conf": false,
+    "save_crop": false,
+    "show_labels": true,
+    "show_conf": true,
+    "show_boxes": true,
+    "line_width": null,
+    "format": "torchscript",
+    "keras": false,
+    "optimize": false,
+    "int8": false,
+    "dynamic": false,
+    "simplify": false,
+    "opset": null,
+    "workspace": 4,
+    "nms": false,
+    "lr0": 0.0001,
+    "lrf": 1.0,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "warmup_epochs": 2000,
+    "warmup_momentum": 0.8,
+    "warmup_bias_lr": 0.1,
+    "box": 7.5,
+    "cls": 0.5,
+    "dfl": 1.5,
+    "pose": 12.0,
+    "kobj": 1.0,
+    "label_smoothing": 0.0,
+    "nbs": 8,
+    "hsv_h": 0.015,
+    "hsv_s": 0.7,
+    "hsv_v": 0.4,
+    "degrees": 0.0,
+    "translate": 0.1,
+    "scale": 0.5,
+    "shear": 0.0,
+    "perspective": 0.0,
+    "flipud": 0.0,
+    "fliplr": 0.5,
+    "mosaic": 1.0,
+    "mixup": 0.0,
+    "copy_paste": 0.0,
+    "auto_augment": "randaugment",
+    "erasing": 0.4,
+    "crop_fraction": 1.0,
+    "cfg": null,
+    "tracker": "botsort.yaml",
+    "save_dir": "/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-FreqFusion-P3-s0"
+  },
+  "python": "3.10.8 (main, Nov 24 2022, 14:13:03) [GCC 11.2.0]",
+  "torch": "2.0.1+cu118",
+  "cuda": "11.8"
+}
