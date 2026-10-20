@@ -1,4 +1,12 @@
-"""Fresh SVRDD ResNet18 experiments with explicit model selection (seed 0).
+"""SVRDD ResNet18 experiments with explicit model selection (seed 0).
+
+Fixed-IoU, batch-8 three-stage comparison (all P3/P4/P5; no P2 branch):
+python train.py --experiment svrdd-baseline --check
+python train.py --experiment svrdd-hsfpn-scsa --check
+python train.py --experiment svrdd-hsfpn-scsa-dysample --check
+python train.py --experiment svrdd-baseline
+python train.py --experiment svrdd-hsfpn-scsa
+python train.py --experiment svrdd-hsfpn-scsa-dysample
 
 python train.py --experiment freqfusion
 python train.py --experiment scsa-freqfusion --check
@@ -28,6 +36,7 @@ from ultralytics.nn.Addmodules.SCSA import BasicBlock_SCSA, SCSA
 from ultralytics.nn.Addmodules.FreqFusion import FreqFusionConcat
 from ultralytics.nn.Addmodules.Dysample import Dy_Sample
 from ultralytics.nn.Addmodules.FDConv import FDConv
+from ultralytics.utils.metrics import bbox_iou
 from ultralytics.utils.torch_utils import de_parallel
 
 
@@ -36,6 +45,21 @@ MODEL_YAML = ROOT / 'ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml'
 DATA_YAML = ROOT / 'SVRDD.yaml'
 RUNS_DIR = ROOT / 'runs'
 EXPERIMENTS = {
+    'svrdd-baseline': {
+        'model': MODEL_YAML.parent / 'resnet18-SVRDD-baseline.yaml',
+        'name': 'svrdd-r18-baseline-fixediou-b8-s0', 'scsa': 0,
+        'project': str(RUNS_DIR), 'factors': (),
+    },
+    'svrdd-hsfpn-scsa': {
+        'model': MODEL_YAML,
+        'name': 'svrdd-r18-hsfpn-scsa-fixediou-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn'),
+    },
+    'svrdd-hsfpn-scsa-dysample': {
+        'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-DySample.yaml',
+        'name': 'svrdd-r18-hsfpn-scsa-dysample-fixediou-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'dysample'),
+    },
     'freqfusion': {
         'model': MODEL_YAML.parent / 'rtdetr-resnet18-FreqFusion-P3.yaml',
         'name': 'rtdetr-resnet18-FreqFusion-P3-s0', 'scsa': 0,
@@ -76,6 +100,9 @@ EXPERIMENTS = {
         'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'dysample', 'p2'),
     },
 }
+FIXED_IOU_GROUPS = frozenset((
+    'svrdd-baseline', 'svrdd-hsfpn-scsa', 'svrdd-hsfpn-scsa-dysample',
+))
 _CANDIDATE_FACTORS = {
     'baseline': (),
     'scsa': ('scsa',),
@@ -148,6 +175,19 @@ def training_args(experiment, data=None, project=None, device='0', overrides=Non
     return args
 
 
+def verify_standard_iou():
+    """Fail before training if an older Inner-IoU implementation is still installed."""
+    box = torch.tensor([[0.0, 0.0, 1.0, 1.0]])
+    shifted = torch.tensor([[0.5, 0.5, 1.5, 1.5]])
+    identical_iou = bbox_iou(box, box, xywh=False)
+    partial_iou = bbox_iou(box, shifted, xywh=False)
+    if not (torch.allclose(identical_iou, torch.ones_like(identical_iou), atol=1e-6)
+            and torch.allclose(partial_iou, torch.full_like(partial_iou, 1 / 7), atol=1e-6)):
+        raise RuntimeError(
+            f'Fixed-IoU SVRDD experiments require standard bbox_iou; '
+            f'found identical={identical_iou.tolist()}, partial={partial_iou.tolist()}')
+
+
 def verify_model(model, experiment='hsfpn-scsa'):
     """Reject wrong experiments, bypassed SCSA and incomplete neck variants."""
     settings = EXPERIMENTS[experiment]
@@ -216,6 +256,9 @@ def verify_model(model, experiment='hsfpn-scsa'):
         valid = valid and isinstance(model.model[6].blocks[1].branch2b.conv, FDConv)
     if 'dysample' in factors and not hsfpn_experiment:
         valid = valid and model.model[-1].f == [19, 22, 25]
+    if experiment in FIXED_IOU_GROUPS:
+        expected_inputs = [26, 19, 12] if hsfpn_experiment else [19, 22, 25]
+        valid = valid and decoder.nc == 7 and decoder.nl == 3 and decoder.f == expected_inputs
     if not valid:
         label = 'HSFPN + enabled SCSA' if hsfpn_experiment else experiment
         raise RuntimeError(f'Expected {label}: {expected}; found {counts}. Check attention flags and P3 wiring.')
@@ -304,13 +347,16 @@ def main():
     args = training_args(options.experiment, data=options.data.expanduser().resolve(),
                          project=options.project.expanduser().resolve() if options.project else None,
                          device=options.device, overrides=overrides)
-    if 'hsfpn' in EXPERIMENTS[options.experiment].get('factors', ()) and not options.check:
+    if (options.experiment in FIXED_IOU_GROUPS or
+            'hsfpn' in EXPERIMENTS[options.experiment].get('factors', ())) and not options.check:
         required = {'batch': 8, 'epochs': 300, 'imgsz': 640, 'warmup_epochs': 2000}
         different = {key: (args[key], value) for key, value in required.items() if args[key] != value}
         if different:
             raise ValueError(f'Matched SVRDD rerun requires {required}; found {different}')
     model_yaml = EXPERIMENTS[options.experiment]['model']
     os.chdir(ROOT)
+    if options.experiment in FIXED_IOU_GROUPS:
+        verify_standard_iou()
     # Build from YAML without model.load(): do not resume or fine-tune old experiments.
     model = RTDETR(str(model_yaml))
     counts = verify_model(model.model, options.experiment)
