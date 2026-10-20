@@ -2,6 +2,11 @@
 
 python train.py --experiment freqfusion
 python train.py --experiment scsa-freqfusion --check
+python train.py --experiment hsfpn-scsa --check
+python train.py --experiment hsfpn-scsa-dysample --check
+python train.py --experiment hsfpn-scsa-p2 --check
+python train.py --experiment hsfpn-scsa-p3decoder --check
+python train.py --experiment hsfpn-scsa-dysample-p2 --check
 """
 import argparse
 from datetime import datetime, timezone
@@ -18,6 +23,7 @@ import torch
 
 from ultralytics import RTDETR
 from ultralytics.nn.Addmodules.HSFPN import CA
+from ultralytics.nn.Addmodules.SlimNeck import GSConv
 from ultralytics.nn.Addmodules.SCSA import BasicBlock_SCSA, SCSA
 from ultralytics.nn.Addmodules.FreqFusion import FreqFusionConcat
 from ultralytics.nn.Addmodules.Dysample import Dy_Sample
@@ -28,20 +34,41 @@ from ultralytics.utils.torch_utils import de_parallel
 ROOT = Path(__file__).resolve().parent
 MODEL_YAML = ROOT / 'ultralytics/cfg/models/rt-detr/resnet18-HSFPN+SCSA.yaml'
 DATA_YAML = ROOT / 'SVRDD.yaml'
+RUNS_DIR = ROOT / 'runs'
 EXPERIMENTS = {
     'freqfusion': {
         'model': MODEL_YAML.parent / 'rtdetr-resnet18-FreqFusion-P3.yaml',
         'name': 'rtdetr-resnet18-FreqFusion-P3-s0', 'scsa': 0,
-        'project': '/root/autodl-fs/RT-DETR-FreqFusion-runs',
+        'project': str(RUNS_DIR),
     },
     'scsa-freqfusion': {
         'model': MODEL_YAML.parent / 'rtdetr-resnet18-SCSA-FreqFusion-P3.yaml',
         'name': 'rtdetr-resnet18-SCSA-FreqFusion-P3-s0', 'scsa': 8,
-        'project': '/root/autodl-fs/RT-DETR-FreqFusion-runs',
+        'project': str(RUNS_DIR),
     },
     'hsfpn-scsa': {
-        'model': MODEL_YAML, 'name': 'rtdetr-resnet18-HSFPN-SCSA-enabled-s0', 'scsa': 8,
-        'project': '/root/autodl-fs/RT-DETR-HSFPN-SCSA-runs',
+        'model': MODEL_YAML, 'name': 'rtdetr-resnet18-HSFPN-SCSA-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn'),
+    },
+    'hsfpn-scsa-dysample': {
+        'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-DySample.yaml',
+        'name': 'rtdetr-resnet18-HSFPN-SCSA-DySample-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'dysample'),
+    },
+    'hsfpn-scsa-p2': {
+        'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-P2.yaml',
+        'name': 'rtdetr-resnet18-HSFPN-SCSA-P2-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'p2'),
+    },
+    'hsfpn-scsa-p3decoder': {
+        'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-P3Decoder.yaml',
+        'name': 'rtdetr-resnet18-HSFPN-SCSA-P3Decoder-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'scale-decoder'),
+    },
+    'hsfpn-scsa-dysample-p2': {
+        'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-DySample-P2.yaml',
+        'name': 'rtdetr-resnet18-HSFPN-SCSA-DySample-P2-b8-s0', 'scsa': 8,
+        'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'dysample', 'p2'),
     },
 }
 _CANDIDATE_FACTORS = {
@@ -73,7 +100,7 @@ for _name, _factors in _CANDIDATE_FACTORS.items():
             'model': MODEL_YAML.parent / _EXISTING_YAMLS.get(_name, f'rtdetr-resnet18-{_name}.yaml'),
             'name': f'rtdetr-resnet18-{_name}-s0',
             'scsa': 8 if 'scsa' in _factors else 0,
-            'project': str(ROOT / 'runs/thesis-candidates'),
+            'project': str(RUNS_DIR),
         }
     EXPERIMENTS[_name]['factors'] = _factors
 TRAIN_ARGS = dict(
@@ -84,8 +111,8 @@ TRAIN_ARGS = dict(
     batch=8,
     workers=4,
     device='0',
-    project='/root/autodl-fs/RT-DETR-HSFPN-SCSA-runs',
-    name='rtdetr-resnet18-HSFPN-SCSA-enabled-s0',
+    project=str(RUNS_DIR),
+    name='rtdetr-resnet18-HSFPN-SCSA-b8-s0',
     exist_ok=False,
     resume=False,
     amp=False,
@@ -117,13 +144,14 @@ def training_args(experiment, data=None, project=None, device='0', overrides=Non
 
 
 def verify_model(model, experiment='hsfpn-scsa'):
-    """Reject wrong experiments, bypassed SCSA and incomplete FreqFusion variants."""
+    """Reject wrong experiments, bypassed SCSA and incomplete neck variants."""
     settings = EXPERIMENTS[experiment]
     model = de_parallel(model)
     modules = list(model.modules())
     blocks = [m for m in modules if isinstance(m, BasicBlock_SCSA)]
-    points = model.model[-1].decoder.layers[0].cross_attn.n_points
-    points = (points,) * 3 if isinstance(points, int) else tuple(points)
+    decoder = model.model[-1]
+    points = decoder.decoder.layers[0].cross_attn.n_points
+    points = (points,) * decoder.nl if isinstance(points, int) else tuple(points)
     counts = {
         'scsa_modules': sum(isinstance(m, SCSA) for m in modules),
         'hsfpn_ca_modules': sum(isinstance(m, CA) for m in modules),
@@ -133,29 +161,58 @@ def verify_model(model, experiment='hsfpn-scsa'):
         'fdconv_modules': sum(isinstance(m, FDConv) for m in modules),
         'decoder_points': points,
     }
-    legacy = experiment == 'hsfpn-scsa'
     factors = settings.get('factors', ())
+    hsfpn_experiment = 'hsfpn' in factors
+    p2_experiment = hsfpn_experiment and 'p2' in factors
+    hsfpn_dysample = hsfpn_experiment and 'dysample' in factors
     expected = {
-        'scsa_modules': 8 if 'scsa' in factors or legacy else 0,
-        'hsfpn_ca_modules': 5 if legacy else 0,
-        'transpose_convolutions': 2 if legacy else 0,
+        'scsa_modules': 8 if 'scsa' in factors else 0,
+        'hsfpn_ca_modules': 6 if p2_experiment else 5 if hsfpn_experiment else 0,
+        'transpose_convolutions': 0 if hsfpn_dysample else 2 if hsfpn_experiment else 0,
         'freqfusion_modules': int('freqfusion' in factors),
-        'dysample_modules': 2 if 'dysample' in factors else 0,
+        'dysample_modules': (3 if p2_experiment else 2) if hsfpn_dysample else
+                            2 if 'dysample' in factors else 0,
         'fdconv_modules': int('fdconv-c4' in factors),
-        'decoder_points': (6, 4, 2) if 'scale-decoder' in factors else (4, 4, 4),
+        'decoder_points': (6, 4, 2) if 'scale-decoder' in factors else (4,) * decoder.nl,
     }
     valid = (counts == expected and len(blocks) == settings['scsa']
              and all(b.att and hasattr(b, 'se') for b in blocks))
+    if hsfpn_experiment:
+        # Counts alone would accept a neck that bypasses the intended fusion paths.
+        routes = {13: 6, 15: 11, 17: [-1, 14], 18: [-1, 15],
+                  20: 5, 22: 15, 24: [-1, 21], 25: [-1, 22]}
+        if p2_experiment:
+            routes.update({27: 26, 28: 27, 29: 4, 30: 28, 31: [-1, 29],
+                           32: [-1, 28], 34: -1, 35: [-1, 26], 37: [36, 19, 12]})
+        else:
+            routes[27] = [26, 19, 12]
+        ca_flags = {10: True, 13: True, 16: False, 20: True, 23: False}
+        if p2_experiment:
+            ca_flags[30] = False
+        projection = model.model[8]
+        valid = (valid and isinstance(projection, GSConv)
+                 and isinstance(projection.cv1.act, torch.nn.SiLU)
+                 and isinstance(projection.cv2.act, torch.nn.SiLU)
+                 and all(model.model[i].f == source for i, source in routes.items())
+                 and all(isinstance(model.model[i], CA) and model.model[i].flag == flag
+                         for i, flag in ca_flags.items())
+                 and all(isinstance(model.model[i], Dy_Sample if hsfpn_dysample
+                                    else torch.nn.ConvTranspose2d) for i in (15, 22)))
+        if p2_experiment:
+            valid = valid and isinstance(model.model[27], Dy_Sample if hsfpn_dysample
+                                         else torch.nn.Upsample)
+    if hsfpn_experiment:
+        valid = valid and model.model[-1].nc == 7
     if 'freqfusion' in factors:
         fusion = [m.fusion for m in modules if isinstance(m, FreqFusionConcat)]
         valid = valid and all(m.feature_resample and m.use_high_pass and m.use_low_pass for m in fusion)
         valid = valid and model.model[17].f == [16, 15] and model.model[-1].f == [18, 21, 24]
     if 'fdconv-c4' in factors:
         valid = valid and isinstance(model.model[6].blocks[1].branch2b.conv, FDConv)
-    if 'dysample' in factors:
+    if 'dysample' in factors and not hsfpn_experiment:
         valid = valid and model.model[-1].f == [19, 22, 25]
     if not valid:
-        label = 'HSFPN + enabled SCSA' if legacy else experiment
+        label = 'HSFPN + enabled SCSA' if hsfpn_experiment else experiment
         raise RuntimeError(f'Expected {label}: {expected}; found {counts}. Check attention flags and P3 wiring.')
     return counts
 
@@ -189,6 +246,10 @@ def on_train_start(trainer, experiment='hsfpn-scsa'):
         sources.extend([ROOT / 'ultralytics/nn/Addmodules/FDConv.py',
                         ROOT / 'ultralytics/nn/Addmodules/FDConvResNet.py',
                         ROOT / 'ultralytics/nn/Addmodules/FDConv-LICENSE.txt'])
+    if 'hsfpn' in factors:
+        sources.extend([ROOT / 'ultralytics/nn/Addmodules/HSFPN.py',
+                        ROOT / 'ultralytics/nn/Addmodules/SlimNeck.py',
+                        ROOT / 'ultralytics/nn/Addmodules/ASFYOLO.py'])
     for source in sources:
         shutil.copy2(source, snapshot / source.name)
     metadata = {
@@ -236,6 +297,11 @@ def main():
     args = training_args(options.experiment, data=options.data.expanduser().resolve(),
                          project=options.project.expanduser().resolve() if options.project else None,
                          device=options.device, overrides=overrides)
+    if 'hsfpn' in EXPERIMENTS[options.experiment].get('factors', ()) and not options.check:
+        required = {'batch': 8, 'epochs': 300, 'imgsz': 640, 'warmup_epochs': 2000}
+        different = {key: (args[key], value) for key, value in required.items() if args[key] != value}
+        if different:
+            raise ValueError(f'Matched SVRDD rerun requires {required}; found {different}')
     model_yaml = EXPERIMENTS[options.experiment]['model']
     os.chdir(ROOT)
     # Build from YAML without model.load(): do not resume or fine-tune old experiments.

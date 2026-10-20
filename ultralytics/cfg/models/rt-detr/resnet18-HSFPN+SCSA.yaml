@@ -2,7 +2,7 @@
   # RT-DETR-l object detection model with P3-P5 outputs. For details see https://docs.ultralytics.com/models/rtdetr
 
   # Parameters
-  nc: 80  # number of classes
+  nc: 7  # SVRDD classes
   scales: # model compound scaling constants, i.e. 'model=yolov8n-cls.yaml' will call yolov8-cls.yaml with scale 'n'
     # [depth, width, max_channels]
     l: [1.00, 1.00, 1024]
@@ -21,7 +21,7 @@
     - [-1, 2, Blocks, [512, BasicBlock_SCSA, 5, True]] # 7-P5
 
   head:
-    - [-1, 1, GSConv, [256, 1, 1, None, 1, 1, False]]  # 8 input_proj.2
+    - [-1, 1, GSConv, [256, 1, 1, None, 1, 1, True]]  # 8: current GSConv uses SiLU internally
     - [-1, 1, AIFI, [1024, 8]]
     - [-1, 1, CA, []] # 10
     - [-1, 1, nn.Conv2d, [256, 1]] # 11
