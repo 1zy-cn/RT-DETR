@@ -46,6 +46,11 @@ EXPERIMENTS = {
         'name': 'rtdetr-resnet18-SCSA-FreqFusion-P3-s0', 'scsa': 8,
         'project': str(RUNS_DIR),
     },
+    'hsfpn': {
+        'model': MODEL_YAML.parent / 'rtdetr-resnet18-HSFPN.yaml',
+        'name': 'rtdetr-resnet18-HSFPN-b8-s0', 'scsa': 0,
+        'project': str(RUNS_DIR), 'factors': ('hsfpn',),
+    },
     'hsfpn-scsa': {
         'model': MODEL_YAML, 'name': 'rtdetr-resnet18-HSFPN-SCSA-b8-s0', 'scsa': 8,
         'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn'),
@@ -235,6 +240,8 @@ def on_train_start(trainer, experiment='hsfpn-scsa'):
     factors = EXPERIMENTS[experiment].get('factors', ())
     sources = [Path(__file__).resolve(), EXPERIMENTS[experiment]['model'], data_yaml,
                ROOT / 'ultralytics/nn/tasks.py', ROOT / 'ultralytics/engine/trainer.py',
+               ROOT / 'ultralytics/utils/metrics.py',
+               ROOT / 'ultralytics/models/utils/loss.py', ROOT / 'ultralytics/models/utils/ops.py',
                ROOT / 'ultralytics/nn/modules/transformer.py', ROOT / 'ultralytics/nn/modules/utils.py',
                ROOT / 'ultralytics/nn/Addmodules/__init__.py',
                ROOT / 'ultralytics/nn/Addmodules/ResNet.py', ROOT / 'ultralytics/nn/Addmodules/SCSA.py']

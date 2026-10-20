@@ -193,9 +193,7 @@ class WIoU_Scale:
 
 
 def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, eps=1e-7):
-    """
-    Modified bbox_iou with Inner-IoU support for slender objects (Cracks).
-    """
+    """Calculate standard IoU or its GIoU, DIoU and CIoU variants."""
     # 获取边界框坐标
     if xywh:  # transform from xywh to xyxy
         (x1, y1, w1, h1), (x2, y2, w2, h2) = box1.chunk(4, -1), box2.chunk(4, -1)
@@ -216,25 +214,6 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, eps=1e-7
     union = w1 * h1 + w2 * h2 - inter + eps
     iou = inter / union
 
-    # --- Inner-IoU 核心逻辑 (针对裂缝优化) ---
-    # 这一步会根据 ratio 缩放辅助框，提高高IoU样本的梯度
-    ratio = 1.2  # 推荐值 1.2~1.35
-    b1_x1_inn = b1_x1 + w1 * (1 - 1 / ratio) / 2
-    b1_x2_inn = b1_x2 - w1 * (1 - 1 / ratio) / 2
-    b1_y1_inn = b1_y1 + h1 * (1 - 1 / ratio) / 2
-    b1_y2_inn = b1_y2 - h1 * (1 - 1 / ratio) / 2
-
-    b2_x1_inn = b2_x1 + w2 * (1 - 1 / ratio) / 2
-    b2_x2_inn = b2_x2 - w2 * (1 - 1 / ratio) / 2
-    b2_y1_inn = b2_y1 + h2 * (1 - 1 / ratio) / 2
-    b2_y2_inn = b2_y2 - h2 * (1 - 1 / ratio) / 2
-
-    inter_inn = (b1_x2_inn.minimum(b2_x2_inn) - b1_x1_inn.maximum(b2_x1_inn)).clamp(0) * \
-                (b1_y2_inn.minimum(b2_y2_inn) - b1_y1_inn.maximum(b2_y1_inn)).clamp(0)
-    union_inn = w1 * h1 + w2 * h2 - inter_inn + eps
-    inner_iou = inter_inn / union_inn
-    # ----------------------------------------
-
     if GIoU or DIoU or CIoU:
         cw = b1_x2.maximum(b2_x2) - b1_x1.minimum(b2_x1)  # convex (smallest enclosing box) width
         ch = b1_y2.maximum(b2_y2) - b1_y1.minimum(b2_y1)  # convex height
@@ -245,12 +224,12 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, eps=1e-7
                 v = (4 / math.pi ** 2) * (torch.atan(w2 / h2) - torch.atan(w1 / h1)).pow(2)
                 with torch.no_grad():
                     alpha = v / (v - iou + (1 + eps))
-                return inner_iou - (rho2 / c2 + v * alpha)  # CIoU returns Inner-CIoU
-            return inner_iou - rho2 / c2  # DIoU returns Inner-DIoU
+                return iou - (rho2 / c2 + v * alpha)
+            return iou - rho2 / c2
         c_area = cw * ch + eps  # convex area
-        return inner_iou - (c_area - union) / c_area  # GIoU returns Inner-GIoU
+        return iou - (c_area - union) / c_area
 
-    return inner_iou  # Default returns Inner-IoU
+    return iou
 
 
 def mask_iou(mask1, mask2, eps=1e-7):
