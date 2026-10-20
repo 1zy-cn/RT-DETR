@@ -16,7 +16,7 @@ class TrainingProvenanceTest(unittest.TestCase):
             trainer = SimpleNamespace(
                 model=model.model,
                 save_dir=Path(directory),
-                args=SimpleNamespace(data=str(ROOT / 'datasets/svrdd-smoke-hf/data.yaml')),
+                args=SimpleNamespace(data=str(ROOT / 'SVRDD.yaml')),
             )
             on_train_start(trainer, experiment='baseline')
             snapshot = Path(directory) / 'source_snapshot'
