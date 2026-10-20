@@ -28,8 +28,10 @@ import subprocess
 import sys
 
 import torch
+import yaml
 
 from ultralytics import RTDETR
+from scripts.prepare_svrdd_official_split import DEFAULT_MANIFESTS, read_manifests
 from ultralytics.nn.Addmodules.HSFPN import CA
 from ultralytics.nn.Addmodules.SlimNeck import GSConv
 from ultralytics.nn.Addmodules.SCSA import BasicBlock_SCSA, SCSA
@@ -47,17 +49,17 @@ RUNS_DIR = ROOT / 'runs'
 EXPERIMENTS = {
     'svrdd-baseline': {
         'model': MODEL_YAML.parent / 'resnet18-SVRDD-baseline.yaml',
-        'name': 'svrdd-r18-baseline-fixediou-b8-s0', 'scsa': 0,
+        'name': 'svrdd-r18-baseline-fixediou-officialsplit-b8-s0', 'scsa': 0,
         'project': str(RUNS_DIR), 'factors': (),
     },
     'svrdd-hsfpn-scsa': {
         'model': MODEL_YAML,
-        'name': 'svrdd-r18-hsfpn-scsa-fixediou-b8-s0', 'scsa': 8,
+        'name': 'svrdd-r18-hsfpn-scsa-fixediou-officialsplit-b8-s0', 'scsa': 8,
         'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn'),
     },
     'svrdd-hsfpn-scsa-dysample': {
         'model': MODEL_YAML.parent / 'resnet18-HSFPN+SCSA-DySample.yaml',
-        'name': 'svrdd-r18-hsfpn-scsa-dysample-fixediou-b8-s0', 'scsa': 8,
+        'name': 'svrdd-r18-hsfpn-scsa-dysample-fixediou-officialsplit-b8-s0', 'scsa': 8,
         'project': str(RUNS_DIR), 'factors': ('scsa', 'hsfpn', 'dysample'),
     },
     'freqfusion': {
@@ -173,6 +175,26 @@ def training_args(experiment, data=None, project=None, device='0', overrides=Non
             raise ValueError(f'Unsupported training overrides: {sorted(unknown)}')
         args.update(overrides)
     return args
+
+
+def verify_official_svrdd_split(data_yaml, manifest_dir=DEFAULT_MANIFESTS):
+    """Reject a mismatched or overlapping SVRDD split before a formal rerun."""
+    data_yaml = Path(data_yaml)
+    config = yaml.safe_load(data_yaml.read_text(encoding='utf-8'))
+    root = Path(config['path'])
+    if not root.is_absolute():
+        root = data_yaml.parent / root
+    expected = read_manifests(manifest_dir)
+    for split, key in (('train', 'train'), ('valid', 'val'), ('test', 'test')):
+        image_dir = root / config[key]
+        label_dir = image_dir.parent / 'labels'
+        if not image_dir.is_dir() or not label_dir.is_dir():
+            raise ValueError(f'Missing official split directories: {image_dir}, {label_dir}')
+        images = {path.name for path in image_dir.iterdir() if path.is_file()}
+        labels = {path.stem for path in label_dir.glob('*.txt')}
+        if images != expected[split] or {Path(name).stem for name in images} != labels:
+            raise ValueError(f'SVRDD {split} does not match the official split manifest or paired labels')
+    return {split: len(names) for split, names in expected.items()}
 
 
 def verify_standard_iou():
@@ -365,6 +387,9 @@ def main():
         print(json.dumps({'experiment': options.experiment, 'model': str(model_yaml), 'training': args}, indent=2))
         print('Check only: no training, dataset validation, or GPU check was performed.')
         return
+    if options.experiment in FIXED_IOU_GROUPS:
+        counts = verify_official_svrdd_split(options.data)
+        print(f'Official SVRDD split verified: {counts}', flush=True)
     model.add_callback('on_train_start', partial(on_train_start, experiment=options.experiment))
     torch.cuda.empty_cache()
     model.train(**args)

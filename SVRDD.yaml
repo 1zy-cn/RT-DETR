@@ -1,5 +1,5 @@
 # SVRDD - Street View Road Damage Detection Dataset
-path: /autodl-fs/data/RT-DETR/datasets/SVRDD
+path: /autodl-fs/data/RT-DETR/datasets/SVRDD-official-split
 train: train/images
 val: valid/images
 test: test/images
