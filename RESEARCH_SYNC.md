@@ -38,7 +38,7 @@ python train.py --experiment freqfusion
 python train.py --experiment scsa-freqfusion
 ```
 
-结果分别保存到 `/root/autodl-fs/RT-DETR-FreqFusion-runs/` 下独立的模型目录。完整模型配置、主分支与 `autodl-tmp` 独立子分支运行步骤、源码来源和验证范围见 [FreqFusion 实验指南](docs/experiments/freqfusion.md)。
+历史结果保留在仓库根目录的 `RT-DETR-FreqFusion-runs/`；当前 `train.py` 默认将新运行写入 `runs/`。完整模型配置、主分支与 `autodl-tmp` 独立子分支运行步骤、源码来源和验证范围见 [FreqFusion 实验指南](docs/experiments/freqfusion.md)。
 
 入口必须显式指定实验；旧 HSFPN＋SCSA 复验可用 `python train.py --experiment hsfpn-scsa`。训练前后会检查模块启用状态，并在结果目录自动保存 `source_snapshot/`。如果旧服务器有手动修改的入口，更新仓库前先保留修改；本地准备和同步不会替你在服务器启动训练或改写旧结果。
 

@@ -1,5 +1,7 @@
 # ResNet18：FreqFusion 与 SCSA＋FreqFusion 对照实验
 
+> 历史候选方案。当前正式对照为 `svrdd-baseline`、`svrdd-hsfpn-scsa` 和 `svrdd-hsfpn-scsa-dysample`；参见仓库根目录 `RESEARCH_SYNC.md`。
+
 两组都只在生成 P3 的位置使用一次 FreqFusion，保留原 RT-DETR 的 P5→P4 融合、自底向上路径和解码器。两份 YAML 的融合网络完全相同，主干差异仅为是否使用 8 个已启用的 SCSA。
 
 | 命令选择 | 模型 YAML（位于 ultralytics/cfg/models/rt-detr） | SCSA | FreqFusion | 七类别参数量 |
@@ -25,16 +27,18 @@ python train.py --experiment scsa-freqfusion
 
 共同设置：从 YAML 随机初始化、不加载旧权重、resume=False、300 轮、imgsz=640、batch=8、workers=4、seed=0、AdamW、lr0=0.0001、lrf=1、weight_decay=0.0001、AMP=False、close_mosaic=10。本分支 `warmup_epochs=2000` 按迭代次数解释。其余使用同一份项目默认参数，初始 mosaic=1.0。两组不因模型名称或 Git 分支改变训练超参数。
 
-默认数据配置仍为仓库根目录 `SVRDD.yaml`，其中数据目录指向共享盘 `/autodl-fs/data/RT-DETR/datasets/SVRDD`。临时目录中的代码也读取这份数据，不需要复制数据集。`--data /absolute/path/dataset.yaml` 可覆盖配置，但两组必须使用同一数据划分。
+当前默认数据配置为仓库根目录 `SVRDD.yaml`，其中数据目录指向共享盘 `/autodl-fs/data/RT-DETR/datasets/SVRDD-official-split`。临时目录中的代码也读取这份数据，不需要复制数据集。`--data /absolute/path/dataset.yaml` 可覆盖配置，但两组必须使用同一数据划分。旧重叠划分结果不能与新划分直接比较。
 
 默认 GPU 为 0；`--device 1` 可选择另一个 GPU。仅有一张 GPU 时建议依次训练；Git 分支和独立目录不会隔离显存。`--project /absolute/shared/output` 可覆盖结果父目录。
 
 默认输出为：
 
 ```text
-/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-FreqFusion-P3-s0
-/root/autodl-fs/RT-DETR-FreqFusion-runs/rtdetr-resnet18-SCSA-FreqFusion-P3-s0
+/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18-FreqFusion-P3-s0
+/autodl-fs/data/RT-DETR/runs/rtdetr-resnet18-SCSA-FreqFusion-P3-s0
 ```
+
+旧 FreqFusion 运行文件仍保留在仓库根目录的 `RT-DETR-FreqFusion-runs/`，不随 Git 同步。
 
 `exist_ok=False`，已有同名目录时框架自动追加编号；不要将自动追加编号误认为从旧权重续训。旧组合可显式使用 `python train.py --experiment hsfpn-scsa`，原 HSFPN YAML 和历史结果保留。
 
