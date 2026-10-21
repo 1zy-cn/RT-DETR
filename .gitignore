@@ -140,6 +140,7 @@ dmypy.json
 datasets/
 .pytest_temp/
 runs/
+/RT-DETR-FreqFusion-runs/
 wandb/
 tests/
 .DS_Store

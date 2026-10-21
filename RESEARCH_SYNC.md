@@ -14,14 +14,26 @@ The original upstream README and LICENSE are preserved. Datasets, checkpoints an
 
 后续选题与实验量规划见 [论文候选改进点备忘录](docs/experiments/2026-10-19-thesis-candidate-roadmap.md)。其中的候选方案均待验证，不能当作已完成的实验结论。
 
-## 当前实验：FreqFusion 与 SCSA＋FreqFusion
+## 当前正式实验：SVRDD 官方划分与修正 IoU
+
+`SVRDD.yaml` 指向去重后的 `datasets/SVRDD-official-split`。正式对照只使用以下三组，均为 batch 8、640 输入、300 轮、seed 0，并从 YAML 随机初始化；`train.py` 会核对官方划分、IoU 实现和模型模块。
+
+```bash
+python train.py --experiment svrdd-baseline
+python train.py --experiment svrdd-hsfpn-scsa
+python train.py --experiment svrdd-hsfpn-scsa-dysample
+```
+
+本轮基线结果目录为 `runs/svrdd-r18-baseline-fixediou-officialsplit-b8-s0/`。旧的重叠划分结果仅作探索记录，不能与此轮正式结果直接比较。本轮的 `runs/`、数据集、权重及所有历史候选结果均保留在服务器，不纳入 Git。
+
+## 历史候选实验：FreqFusion 与 SCSA＋FreqFusion
 
 两份配置均只改生成 P3 的融合位置，保留原 RT-DETR 双向融合路径；SCSA 组合含 8 个有效注意力模块。统一使用 batch=8、300轮、640输入、seed=0，从 YAML 随机初始化。
 
 ```bash
 python train.py --experiment freqfusion --check
 python train.py --experiment scsa-freqfusion --check
-# 正式训练时二选一，移除 --check：
+# 如需复现历史候选实验，移除 --check：
 python train.py --experiment freqfusion
 python train.py --experiment scsa-freqfusion
 ```
