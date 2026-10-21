@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import torch
 import yaml
+from ultralytics.cfg import get_cfg
 
 from train import EXPERIMENTS, training_args, verify_model, verify_standard_iou
 from ultralytics import RTDETR
@@ -27,6 +28,8 @@ class FixedIouThreeStageTest(unittest.TestCase):
             )
         self.assertEqual(len({arg['name'] for arg in args}), 3)
         self.assertEqual((args[0]['batch'], args[0]['epochs'], args[0]['imgsz']), (8, 300, 640))
+        self.assertEqual(args[0]['warmup_bias_lr'], 0.0)
+        self.assertEqual(get_cfg(overrides=args[0]).warmup_bias_lr, 0.0)
 
     def test_models_have_seven_classes_and_only_requested_modules(self):
         expected = ((0, 0, 0), (8, 5, 0), (8, 5, 2))

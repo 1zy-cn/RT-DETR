@@ -156,6 +156,7 @@ TRAIN_ARGS = dict(
     cos_lr=False,
     weight_decay=0.0001,
     warmup_epochs=2000,  # This fork interprets the value as warmup iterations.
+    warmup_bias_lr=0.0,  # AdamW biases must not start at the YOLO default 0.1.
     close_mosaic=10,
     seed=0,
     deterministic=True,
@@ -371,7 +372,8 @@ def main():
                          device=options.device, overrides=overrides)
     if (options.experiment in FIXED_IOU_GROUPS or
             'hsfpn' in EXPERIMENTS[options.experiment].get('factors', ())) and not options.check:
-        required = {'batch': 8, 'epochs': 300, 'imgsz': 640, 'warmup_epochs': 2000}
+        required = {'batch': 8, 'epochs': 300, 'imgsz': 640,
+                    'warmup_epochs': 2000, 'warmup_bias_lr': 0.0}
         different = {key: (args[key], value) for key, value in required.items() if args[key] != value}
         if different:
             raise ValueError(f'Matched SVRDD rerun requires {required}; found {different}')
