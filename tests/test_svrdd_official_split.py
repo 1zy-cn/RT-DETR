@@ -38,12 +38,14 @@ class OfficialSplitTest(unittest.TestCase):
                     labels.mkdir(parents=True, exist_ok=True)
                     (images / f'{name}.jpg').write_bytes(f'image-{name}'.encode())
                     (labels / f'{name}.txt').write_text('0 0.5 0.5 0.2 0.2\n', encoding='utf-8')
-            result = build_dataset(source, dest, manifests)
+            result = build_dataset(source, dest, manifests, workers=4)
             self.assertEqual(result['counts'], {'train': 2, 'valid': 1, 'test': 1})
             for split, names in {'train': {'a', 'b'}, 'valid': {'c'}, 'test': {'d'}}.items():
                 self.assertEqual({p.stem for p in (dest / split / 'images').iterdir()}, names)
                 self.assertEqual({p.stem for p in (dest / split / 'labels').iterdir()}, names)
             self.assertEqual((dest / 'valid/images/c.jpg').read_bytes(), b'image-c')
+            (dest / 'valid/images/c.jpg').write_bytes(b'edited-destination')
+            self.assertEqual((source / 'train/images/c.jpg').read_bytes(), b'image-c')
             data_yaml = root / 'data.yaml'
             data_yaml.write_text(yaml.safe_dump({
                 'path': str(dest), 'train': 'train/images', 'val': 'valid/images', 'test': 'test/images'}), encoding='utf-8')

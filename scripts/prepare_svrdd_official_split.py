@@ -9,6 +9,7 @@ import filecmp
 import hashlib
 import json
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -63,7 +64,9 @@ def source_files(source):
     return indexed, total_images
 
 
-def build_dataset(source, destination, manifest_dir=DEFAULT_MANIFESTS):
+def build_dataset(source, destination, manifest_dir=DEFAULT_MANIFESTS, workers=8):
+    if workers < 1:
+        raise ValueError('workers must be at least 1')
     source, destination, manifest_dir = map(Path, (source, destination, manifest_dir))
     groups = read_manifests(manifest_dir)
     indexed, total_images = source_files(source)
@@ -76,15 +79,21 @@ def build_dataset(source, destination, manifest_dir=DEFAULT_MANIFESTS):
     if staging.exists():
         raise FileExistsError(f'Staging directory already exists: {staging}')
     staging.mkdir(parents=True)
-    for split in SPLITS:
-        image_dir, label_dir = staging / split / 'images', staging / split / 'labels'
-        image_dir.mkdir(parents=True)
-        label_dir.mkdir(parents=True)
-        for name in sorted(groups[split]):
-            image, label = indexed[name]
-            shutil.copy2(image, image_dir / name)
-            shutil.copy2(label, label_dir / label.name)
-        print(f'{split}: {len(groups[split])} images and labels copied', flush=True)
+    def copy_pair(item):
+        name, image_dir, label_dir = item
+        image, label = indexed[name]
+        shutil.copy2(image, image_dir / name)
+        shutil.copy2(label, label_dir / label.name)
+
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        for split in SPLITS:
+            image_dir, label_dir = staging / split / 'images', staging / split / 'labels'
+            image_dir.mkdir(parents=True)
+            label_dir.mkdir(parents=True)
+            tasks = ((name, image_dir, label_dir) for name in sorted(groups[split]))
+            for _ in executor.map(copy_pair, tasks):
+                pass
+            print(f'{split}: {len(groups[split])} images and labels copied', flush=True)
     manifest_copy = staging / 'official_manifest'
     manifest_copy.mkdir()
     for filename in MANIFEST_FILES.values():
@@ -112,8 +121,9 @@ def main():
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--destination', type=Path, required=True)
     parser.add_argument('--manifest-dir', type=Path, default=DEFAULT_MANIFESTS)
+    parser.add_argument('--workers', type=int, default=8, help='Parallel file copies (default: 8)')
     args = parser.parse_args()
-    print(json.dumps(build_dataset(args.source, args.destination, args.manifest_dir), ensure_ascii=False, indent=2))
+    print(json.dumps(build_dataset(args.source, args.destination, args.manifest_dir, args.workers), ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':
