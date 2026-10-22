@@ -1,0 +1,259 @@
+{
+  "source": "server completed runs, 2026-10-22",
+  "runs": {
+    "baseline": {
+      "original_run": "runs/svrdd-r18-baseline-fixediou-officialsplit-b8-s0",
+      "files": {
+        "args.yaml": {
+          "size": 1737,
+          "sha256": "bfb80ed5af07f0591bda73eeb45cc5352d6a2fd5bc18eaea15d2839e8cc2ba95"
+        },
+        "results.csv": {
+          "size": 78288,
+          "sha256": "414bbdb45c31e27e77f3e23c3a4343c545151e2062dc5d55fd1c33add4a1d90a"
+        },
+        "F1_curve.png": {
+          "size": 305665,
+          "sha256": "eb6b116b44c09eef064f9b1326772a1816ad27a82bb7aacbb9c74ef44f1da1cd"
+        },
+        "PR_curve.png": {
+          "size": 247201,
+          "sha256": "1316db6fa6388f4295d4793fe1f39fd9354cd812d53ec78513b1cb0de84816c4"
+        },
+        "P_curve.png": {
+          "size": 255282,
+          "sha256": "39760d3b4121678340afc1a1e0f250a460456bc5a8686db7d49dee1ca405e0af"
+        },
+        "R_curve.png": {
+          "size": 267568,
+          "sha256": "aa1622ff813803a7767cc6a8d26e6746f005c1a3f73075ce99bb7bce5ecaca51"
+        },
+        "results.png": {
+          "size": 246078,
+          "sha256": "da16dde444ffcbc0bf4b9d2c0abe6870c9265251e78582b6dcd4f159e3d99f72"
+        },
+        "val_batch0_labels.jpg": {
+          "size": 598478,
+          "sha256": "0286781645394fd065392ee083fc1da0b7e3b37e431bfe075228a0bb8fee3388"
+        },
+        "val_batch0_pred.jpg": {
+          "size": 607736,
+          "sha256": "c53819d2a8fa093a9675d9918fbe4560eebd94b417a0fdac1506347efc948569"
+        },
+        "val_batch1_labels.jpg": {
+          "size": 575896,
+          "sha256": "b4e4ca1676c6c749fe1080ea7f45244ef82d83968134d0ac5d547990fc218b48"
+        },
+        "val_batch1_pred.jpg": {
+          "size": 588106,
+          "sha256": "1b4b2170528fb407a7212947e5bfa6236b7d126346bd0b5d849a3bfdb93fbd05"
+        },
+        "val_batch2_labels.jpg": {
+          "size": 585874,
+          "sha256": "febd8c74d9ff9be9017fa6b1c0a90f89b379551459bd063e570ff4f3c0058142"
+        },
+        "source_snapshot/train.py": {
+          "size": 20210,
+          "sha256": "0d0152e3c857fc8b18f7987dadc302042a2c8614652ad23bdf838f5659df297a"
+        },
+        "source_snapshot/resnet18-SVRDD-baseline.yaml": {
+          "size": 1291,
+          "sha256": "356e1d487d2e8ec4ce8792ba15c299269b9009daa2b407978186c980ef750b14"
+        },
+        "source_snapshot/SVRDD.yaml": {
+          "size": 321,
+          "sha256": "9dc6fa23aeb787d142382412139550d7bdb6499ae82dc694a414b6a40bead4e6"
+        },
+        "source_snapshot/tasks.py": {
+          "size": 42542,
+          "sha256": "0db613380e1b4dfbcea931742ba386761ed3ec198cf5bb865985e791e6e38771"
+        },
+        "source_snapshot/trainer.py": {
+          "size": 32716,
+          "sha256": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53"
+        },
+        "source_snapshot/metrics.py": {
+          "size": 56763,
+          "sha256": "6fd1b92e8952ab4aa78e1d4fab2b1356626c39969693fa3f8158f508dd55a20a"
+        },
+        "source_snapshot/loss.py": {
+          "size": 15963,
+          "sha256": "5232492d7ccee6578a2a1f674e2db57107a0108127152fd24d8328b10624aa20"
+        },
+        "source_snapshot/ops.py": {
+          "size": 13283,
+          "sha256": "23e6a3cb4304f4f81761dff799b57c110a4e48325148ee952b97da99d5612926"
+        },
+        "source_snapshot/transformer.py": {
+          "size": 20301,
+          "sha256": "34d350ff1affcdefb2c397ba21834d34eef96f452ba56fb0ab145c1b34cb0c01"
+        },
+        "source_snapshot/utils.py": {
+          "size": 4581,
+          "sha256": "d16e1e482169a37f76fb949bdcf8b0a7008b6ccfb53de2fdca42ca025a655290"
+        },
+        "source_snapshot/__init__.py": {
+          "size": 1982,
+          "sha256": "41f9a424d811766f46bd8e1617590f334dbef8707306e1e1cb332b500eafd245"
+        },
+        "source_snapshot/ResNet.py": {
+          "size": 6132,
+          "sha256": "773ef375ed9d59c94bed4bb0fa05d50dde2256e783f37d250ea36d9fee4c8c4b"
+        },
+        "source_snapshot/SCSA.py": {
+          "size": 10447,
+          "sha256": "7035ab770729cfbc5d78ff08aab9d5c1b47d11f370b4fd00ee17229fdd21204e"
+        },
+        "source_snapshot/provenance.json": {
+          "size": 8300,
+          "sha256": "e5dbb2b9ea2344c17653252478f27fdf4b9dcd91042a753483e02a8521162755"
+        }
+      },
+      "checkpoints": {
+        "best.pt": {
+          "size": 40488922,
+          "sha256": "e19d7f197c3035958c420995844aab727628f2dd2fca36902c11fe7189339051"
+        },
+        "last.pt": {
+          "size": 40494874,
+          "sha256": "169c375536521ffd8ef9cb2f1ea934584ef0b1f7f25bfa786c43b83924f67219"
+        }
+      }
+    },
+    "hsfpn-scsa": {
+      "original_run": "runs/svrdd-r18-hsfpn-scsa-fixediou-officialsplit-b8-s0",
+      "files": {
+        "args.yaml": {
+          "size": 1737,
+          "sha256": "c76df3c25de3a02fcb6de12454b08f1d606a127b5e943c3e02ae701764ad56f7"
+        },
+        "results.csv": {
+          "size": 91056,
+          "sha256": "e03a3dfb643afb27d4877d856ef61cdcb383d09adcad0ed5a8b6e354ac3bf598"
+        },
+        "F1_curve.png": {
+          "size": 309377,
+          "sha256": "b8a65593c60955af6edf9c881e4b2729c3ee98b343441a99dac59345dbdd5cd6"
+        },
+        "PR_curve.png": {
+          "size": 239183,
+          "sha256": "3cc52fcbb63e237c49a38df0e446aa0611eec01788f6f955117ee89fa28f6130"
+        },
+        "P_curve.png": {
+          "size": 268122,
+          "sha256": "cf1b90ec57ac87c6aef1dd2013ce5735f5e5a0573f9dbf706814c9b3c08f0e83"
+        },
+        "R_curve.png": {
+          "size": 264305,
+          "sha256": "9aafd2c8417c6f537b02e3d6f3c93374e3fd43856889a088c71a845fbfe622f6"
+        },
+        "results.png": {
+          "size": 258018,
+          "sha256": "50f937346ad2412fc6adf6f740c4497dc376b5fa8f910f8cf35cc7a3973f9cf7"
+        },
+        "val_batch0_labels.jpg": {
+          "size": 598478,
+          "sha256": "0286781645394fd065392ee083fc1da0b7e3b37e431bfe075228a0bb8fee3388"
+        },
+        "val_batch0_pred.jpg": {
+          "size": 605617,
+          "sha256": "91a29859bf028833e3c53a1aa940f720a1a14001ec55843dd9fb7c056419a7b2"
+        },
+        "val_batch1_labels.jpg": {
+          "size": 575896,
+          "sha256": "b4e4ca1676c6c749fe1080ea7f45244ef82d83968134d0ac5d547990fc218b48"
+        },
+        "val_batch1_pred.jpg": {
+          "size": 587202,
+          "sha256": "57334b0af42745b29a5858a4963c356b582d8c3d5e7c94309c4e37be1b9f8972"
+        },
+        "val_batch2_labels.jpg": {
+          "size": 585874,
+          "sha256": "febd8c74d9ff9be9017fa6b1c0a90f89b379551459bd063e570ff4f3c0058142"
+        },
+        "val_batch2_pred.jpg": {
+          "size": 596455,
+          "sha256": "993d70100a147643a730b39b016e772c862b6c317d8c37335ff94a70276e5adf"
+        },
+        "source_snapshot/train.py": {
+          "size": 20210,
+          "sha256": "0d0152e3c857fc8b18f7987dadc302042a2c8614652ad23bdf838f5659df297a"
+        },
+        "source_snapshot/resnet18-HSFPN+SCSA.yaml": {
+          "size": 1850,
+          "sha256": "a71f3ae3829f187fc3c34cbda6252daef99c34c8aab32fc3d49c2bab5ce16430"
+        },
+        "source_snapshot/SVRDD.yaml": {
+          "size": 321,
+          "sha256": "9dc6fa23aeb787d142382412139550d7bdb6499ae82dc694a414b6a40bead4e6"
+        },
+        "source_snapshot/tasks.py": {
+          "size": 42542,
+          "sha256": "0db613380e1b4dfbcea931742ba386761ed3ec198cf5bb865985e791e6e38771"
+        },
+        "source_snapshot/trainer.py": {
+          "size": 32716,
+          "sha256": "36f1bea0bc930a0e6522786af70f512f3a67f0298d2b232fce9d883789207c53"
+        },
+        "source_snapshot/metrics.py": {
+          "size": 56763,
+          "sha256": "6fd1b92e8952ab4aa78e1d4fab2b1356626c39969693fa3f8158f508dd55a20a"
+        },
+        "source_snapshot/loss.py": {
+          "size": 15963,
+          "sha256": "5232492d7ccee6578a2a1f674e2db57107a0108127152fd24d8328b10624aa20"
+        },
+        "source_snapshot/ops.py": {
+          "size": 13283,
+          "sha256": "23e6a3cb4304f4f81761dff799b57c110a4e48325148ee952b97da99d5612926"
+        },
+        "source_snapshot/transformer.py": {
+          "size": 20301,
+          "sha256": "34d350ff1affcdefb2c397ba21834d34eef96f452ba56fb0ab145c1b34cb0c01"
+        },
+        "source_snapshot/utils.py": {
+          "size": 4581,
+          "sha256": "d16e1e482169a37f76fb949bdcf8b0a7008b6ccfb53de2fdca42ca025a655290"
+        },
+        "source_snapshot/__init__.py": {
+          "size": 1982,
+          "sha256": "41f9a424d811766f46bd8e1617590f334dbef8707306e1e1cb332b500eafd245"
+        },
+        "source_snapshot/ResNet.py": {
+          "size": 6132,
+          "sha256": "773ef375ed9d59c94bed4bb0fa05d50dde2256e783f37d250ea36d9fee4c8c4b"
+        },
+        "source_snapshot/SCSA.py": {
+          "size": 10447,
+          "sha256": "7035ab770729cfbc5d78ff08aab9d5c1b47d11f370b4fd00ee17229fdd21204e"
+        },
+        "source_snapshot/HSFPN.py": {
+          "size": 2891,
+          "sha256": "2e92163a234580607f439a6edd22f83fc7ba2f102d0467c79ff00d9daba8cc66"
+        },
+        "source_snapshot/SlimNeck.py": {
+          "size": 4576,
+          "sha256": "2ebf785de8cb8fe890c977ed50d6bacada755273fe5053695249c63a039955d7"
+        },
+        "source_snapshot/ASFYOLO.py": {
+          "size": 5713,
+          "sha256": "28a6ecac69905cfa88c39b0b5266dbb0812d1420f3639f4ce4a9a172759a5307"
+        },
+        "source_snapshot/provenance.json": {
+          "size": 8325,
+          "sha256": "a9aaee8dc733ebb961dbf39310426ad53083612a03ad315de96df8a71d3c48ee"
+        }
+      },
+      "checkpoints": {
+        "best.pt": {
+          "size": 38900594,
+          "sha256": "3f4b3e2e51f83f14bf582aad40d2840f7b390533018123697c2baed6df965e9a"
+        },
+        "last.pt": {
+          "size": 38906610,
+          "sha256": "40053de9538669a35bbb6f395ba0a94bc5d1c812b5f027373476d6cee2996184"
+        }
+      }
+    }
+  }
+}

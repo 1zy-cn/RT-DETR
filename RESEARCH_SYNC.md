@@ -16,6 +16,8 @@ The original upstream README and LICENSE are preserved. Datasets, checkpoints an
 
 ## 当前正式实验：SVRDD 官方划分与修正 IoU
 
+基线与 HSFPN+SCSA 已结束并归档在 [2026-10-22 同协议结果报告](experiment_reports/2026-10-22-officialsplit-fixediou/REPORT.md)：seed 0 验证集 mAP50:95 分别为 45.816% 与 44.640%，组合没有涨点。权重仍在服务器，Git 保存完整 CSV、配置、源码快照、图表及权重哈希。
+
 `SVRDD.yaml` 指向去重后的 `datasets/SVRDD-official-split`。正式对照只使用以下三组，均为 batch 8、640 输入、300 轮、seed 0，并从 YAML 随机初始化；`train.py` 会核对官方划分、IoU 实现和模型模块。
 
 ```bash
