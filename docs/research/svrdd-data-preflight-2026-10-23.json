@@ -1,0 +1,106 @@
+{
+  "counts": {
+    "train": 6000,
+    "valid": 1000,
+    "test": 1000
+  },
+  "class_names": [
+    "D00-纵向裂缝",
+    "D10-横向裂缝",
+    "D20-网状裂缝",
+    "D40-坑槽",
+    "井盖",
+    "纵向修补",
+    "横向修补"
+  ],
+  "deep": true,
+  "splits": {
+    "train": {
+      "images": 6000,
+      "boxes_per_class": [
+        3461,
+        2550,
+        1324,
+        679,
+        2517,
+        3109,
+        1980
+      ],
+      "effective_boxes_per_class": [
+        3461,
+        2550,
+        1324,
+        679,
+        2516,
+        3109,
+        1980
+      ],
+      "empty_labels": 0,
+      "duplicate_label_rows": 1,
+      "boundary_boxes": 0,
+      "label_cache_present": true
+    },
+    "valid": {
+      "images": 1000,
+      "boxes_per_class": [
+        588,
+        418,
+        222,
+        115,
+        403,
+        519,
+        347
+      ],
+      "effective_boxes_per_class": [
+        588,
+        418,
+        222,
+        115,
+        403,
+        519,
+        347
+      ],
+      "empty_labels": 0,
+      "duplicate_label_rows": 0,
+      "boundary_boxes": 0,
+      "label_cache_present": true
+    },
+    "test": {
+      "images": 1000,
+      "boxes_per_class": [
+        616,
+        436,
+        182,
+        124,
+        419,
+        500,
+        295
+      ],
+      "effective_boxes_per_class": [
+        616,
+        436,
+        182,
+        124,
+        419,
+        500,
+        295
+      ],
+      "empty_labels": 0,
+      "duplicate_label_rows": 0,
+      "boundary_boxes": 0,
+      "label_cache_present": true
+    }
+  },
+  "cross_split_duplicates": [],
+  "within_split_duplicates": [],
+  "manifest_sha256": {
+    "train": "0fe1da3de0c29c5fb68702a920b36efdb261da930d2e85594b36c85154e32487",
+    "valid": "602b72d083f7ca351c0e138f0812780c70b2cb53cd2e2d58245534b9d8676aff",
+    "test": "1a334915af3845459bce6b68df563678445b3cc1154ee954e65b4d5d85522030"
+  },
+  "warnings": [
+    "train: 1 exact duplicate label rows; Ultralytics removes duplicates in memory; source labels are retained"
+  ],
+  "dataset_sha256": "6c39bc64da1fbf7f8db636feea2ed8cbf66dd525a8ae631c257337a097b1cd79",
+  "fingerprint_scope": "paths+raw_labels+raw_images"
+}

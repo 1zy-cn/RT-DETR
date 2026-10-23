@@ -725,7 +725,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
         if m in (Classify, Conv, ConvTranspose, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, Focus,
                  BottleneckCSP, C1, C2, C2f, C3, C3TR, C3Ghost, nn.ConvTranspose2d, DWConvTranspose2d, C3x, RepC3,
                  Blocks, BlocksFDConvC4, ConvNormLayer, VoVGSCSP, GSConv, nn.Conv2d, CSPStage, DiverseBranchBlock,
-                 RepNCSPELAN4, RepNCSPELAN4_high, ADown, RepC3_BFAM, RepC3_WTConv, DCNv2, C2f_DCNv2):
+                 RepNCSPELAN4, RepNCSPELAN4_high, ADown, RepC3_BFAM, RepC3_WTConv, RepC3_Conv3XC, DCNv2, C2f_DCNv2):
             c1, c2 = ch[f], args[0]
             if c2 != nc:  # if c2 not equal to number of classes (i.e. for Classify() output)
                 c2 = make_divisible(min(c2, max_channels) * width, 8)
@@ -740,7 +740,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 args = [c1, c2, *args[1:]]
 
             if m in (BottleneckCSP, C1, C2, C2f, C3, C3TR, C3Ghost, C3x, RepC3, Blocks, VoVGSCSP, CSPStage,
-                     RepC3_BFAM, RepC3_WTConv, C2f_DCNv2, BlocksFDConvC4):
+                     RepC3_BFAM, RepC3_WTConv, RepC3_Conv3XC, C2f_DCNv2, BlocksFDConvC4):
                 args.insert(2, n)  # number of repeats
                 n = 1
             # RepNCSPELAN4不需要n参数，单独处理

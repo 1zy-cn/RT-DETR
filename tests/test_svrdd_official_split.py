@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from scripts.prepare_svrdd_official_split import build_dataset, read_manifests
+from scripts.audit_svrdd import CLASS_NAMES
 from train import verify_official_svrdd_split
 
 
@@ -48,7 +49,8 @@ class OfficialSplitTest(unittest.TestCase):
             self.assertEqual((source / 'train/images/c.jpg').read_bytes(), b'image-c')
             data_yaml = root / 'data.yaml'
             data_yaml.write_text(yaml.safe_dump({
-                'path': str(dest), 'train': 'train/images', 'val': 'valid/images', 'test': 'test/images'}), encoding='utf-8')
+                'path': str(dest), 'train': 'train/images', 'val': 'valid/images', 'test': 'test/images',
+                'nc': 7, 'names': CLASS_NAMES}), encoding='utf-8')
             verify_official_svrdd_split(data_yaml, manifests)
             (dest / 'valid/images/c.jpg').rename(dest / 'valid/images/a.jpg')
             with self.assertRaisesRegex(ValueError, 'official split'):

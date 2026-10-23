@@ -469,7 +469,8 @@ def strip_optimizer(f: Union[str, Path] = 'best.pt', s: str = '') -> None:
     for k in 'optimizer', 'best_fitness', 'ema', 'updates':  # keys
         x[k] = None
     x['epoch'] = -1
-    x['model'].half()  # to FP16
+    # Preserve the configured checkpoint precision, including final best.pt.
+    x['model'].to(dtype=torch.float16 if args and args.get('half', False) else torch.float32)
     for p in x['model'].parameters():
         p.requires_grad = False
     x['train_args'] = {k: v for k, v in args.items() if k in DEFAULT_CFG_KEYS}  # strip non-default keys

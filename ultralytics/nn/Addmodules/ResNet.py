@@ -15,6 +15,7 @@ from .TripletAttention import *
 from .DAttention import *
 from .Biformer import *
 from .SCSA import *
+from .CDRB import BasicBlock_CDRB
 
 class ConvNormLayer(nn.Module):
     def __init__(self,

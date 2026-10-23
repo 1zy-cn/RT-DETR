@@ -74,3 +74,5 @@ from .BFAM import *
 from .WTConv import *
 from .FreqFusion import FreqFusionConcat
 from .FDConvResNet import *
+from .CDRB import BasicBlock_CDRB
+from .Conv3XC import Conv3XC, RepC3_Conv3XC

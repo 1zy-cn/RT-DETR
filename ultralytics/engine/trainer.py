@@ -427,8 +427,8 @@ class BaseTrainer:
         ckpt = {
             'epoch': self.epoch,
             'best_fitness': self.best_fitness,
-            'model': deepcopy(de_parallel(self.model)).half(),
-            'ema': deepcopy(self.ema.ema).half(),
+            'model': deepcopy(de_parallel(self.model)).to(dtype=torch.float16 if self.args.half else torch.float32),
+            'ema': deepcopy(self.ema.ema).to(dtype=torch.float16 if self.args.half else torch.float32),
             'updates': self.ema.updates,
             'optimizer': self.optimizer.state_dict(),
             'train_args': vars(self.args),  # save as dict
