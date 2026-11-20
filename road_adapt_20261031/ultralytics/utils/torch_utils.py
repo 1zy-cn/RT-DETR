@@ -456,7 +456,8 @@ def strip_optimizer(f: Union[str, Path] = 'best.pt', s: str = '') -> None:
             strip_optimizer(f)
         ```
     """
-    x = torch.load(f, map_location=torch.device('cpu'))
+    # This finalizes a trusted full-model checkpoint written by this trainer.
+    x = torch.load(f, map_location=torch.device('cpu'), weights_only=False)
     if 'model' not in x:
         LOGGER.info(f'Skipping {f}, not a valid Ultralytics model.')
         return

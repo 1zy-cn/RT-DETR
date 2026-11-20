@@ -69,7 +69,7 @@ def main(argv=None):
         return
     import torch
     from weather_hfc_training import WeatherHFCValidator
-    checkpoint = torch.load(protocol['weights'], map_location='cpu')
+    checkpoint = torch.load(protocol['weights'], map_location='cpu', weights_only=False)
     model = (checkpoint.get('ema') or checkpoint.get('model')) if isinstance(checkpoint, dict) else checkpoint
     names = yaml.safe_load(Path(protocol['data']).read_text(encoding='utf-8'))['names']
     names = dict(enumerate(names)) if isinstance(names, list) else names

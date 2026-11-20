@@ -207,6 +207,10 @@ class BaseTrainer:
             rank=RANK,
             world_size=world_size)
 
+    def check_amp_support(self):
+        """Keep the shared checker as the default for existing trainers."""
+        return check_amp(self.model)
+
     def _setup_train(self, world_size):
         """Builds dataloaders and optimizer on correct rank process."""
 
@@ -235,7 +239,7 @@ class BaseTrainer:
         self.amp = torch.tensor(self.args.amp).to(self.device)  # True or False
         if self.amp and RANK in (-1, 0):  # Single-GPU and DDP
             callbacks_backup = callbacks.default_callbacks.copy()  # backup callbacks as check_amp() resets them
-            self.amp = torch.tensor(check_amp(self.model), device=self.device)
+            self.amp = torch.tensor(self.check_amp_support(), device=self.device)
             callbacks.default_callbacks = callbacks_backup  # restore callbacks
         if RANK > -1 and world_size > 1:  # DDP
             dist.broadcast(self.amp, src=0)  # broadcast the tensor from rank 0 to all other ranks (returns None)

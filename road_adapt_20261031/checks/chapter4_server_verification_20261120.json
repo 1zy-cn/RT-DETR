@@ -1,0 +1,79 @@
+{
+  "scope": "Server entrypoint preparation verified locally, not actual server execution or formal experiment",
+  "regressions_passed": 154,
+  "real_existing_dataset_check": true,
+  "default_configuration": "baseline",
+  "server_preset": {
+    "imgsz": 640,
+    "batch": 8,
+    "amp": true,
+    "workers": 0,
+    "epochs": 300,
+    "patience": 20,
+    "seed": 0
+  },
+  "amp_update_probes": [
+    {
+      "configuration": "baseline",
+      "passed": true,
+      "batch": 8,
+      "imgsz": 640,
+      "amp": true,
+      "repeated_training_sources": 2,
+      "finite_loss_and_gradients": true,
+      "successful_step_not_skipped": true,
+      "initial_overflow_skips": 5,
+      "skipped_scales": [
+        65536.0,
+        32768.0,
+        16384.0,
+        8192.0,
+        4096.0
+      ],
+      "final_scale": 2048.0,
+      "teacher_frozen_and_unchanged": null,
+      "region_positive": null,
+      "peak_allocated_bytes": 3210400256,
+      "peak_reserved_bytes": 3787456512
+    },
+    {
+      "configuration": "hfc",
+      "passed": true,
+      "batch": 8,
+      "imgsz": 640,
+      "amp": true,
+      "repeated_training_sources": 2,
+      "finite_loss_and_gradients": true,
+      "successful_step_not_skipped": true,
+      "initial_overflow_skips": 5,
+      "skipped_scales": [
+        65536.0,
+        32768.0,
+        16384.0,
+        8192.0,
+        4096.0
+      ],
+      "final_scale": 2048.0,
+      "teacher_frozen_and_unchanged": true,
+      "region_positive": true,
+      "peak_allocated_bytes": 3401637888,
+      "peak_reserved_bytes": 4007657472
+    }
+  ],
+  "local_full_model_amp_gate": [
+    {
+      "configuration": "baseline",
+      "local_amp_gate_passed": true,
+      "training_and_rng_preserved": true
+    },
+    {
+      "configuration": "hfc",
+      "local_amp_gate_passed": true,
+      "training_and_rng_preserved": true
+    }
+  ],
+  "pytorch_26_default_simulated_tests_passed": 6,
+  "real_linux_server_executed": false,
+  "formal_training_started": false,
+  "dataset_images_labels_or_source_metadata_uploaded": false
+}

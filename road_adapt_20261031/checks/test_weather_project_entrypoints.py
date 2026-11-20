@@ -46,7 +46,7 @@ def test_resume_refuses_changed_list_before_creating_output(tmp_path):
 
 def test_snapshot_includes_data_lists(tmp_path):
     from weather_hfc_protocol import freeze_inputs
-    for name in ['manifest.jsonl', 'weights.pt', 'model.yaml', 'train.txt', 'valid.txt', 'test.txt']:
+    for name in ['manifest.jsonl', 'weights.pt', 'model.yaml', 'train.txt', 'valid.txt', 'test.txt', 'weather_amp.py']:
         (tmp_path/name).write_text('fixture\n', encoding='utf-8')
     data = tmp_path/'data.yaml'
     data.write_text(yaml.safe_dump({'path': str(tmp_path), 'train': 'train.txt', 'val': 'valid.txt', 'test': 'test.txt'}))
@@ -54,6 +54,7 @@ def test_snapshot_includes_data_lists(tmp_path):
     p.update(data=str(data), teacher_checkpoint=None)
     snapshot = freeze_inputs(p, code_root=tmp_path)
     assert all(str(tmp_path/name) in snapshot for name in ['train.txt','valid.txt','test.txt'])
+    assert str(tmp_path/'weather_amp.py') in snapshot, 'resume must freeze its local runtime AMP checker'
 
 
 def test_evaluation_preview_targets_real_test_split_and_group(tmp_path):

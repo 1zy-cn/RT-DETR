@@ -24,7 +24,8 @@ def freeze_inputs(protocol, code_root=ROOT):
         paths.append(Path(protocol['teacher_checkpoint']))
     paths += list((code_root/'ultralytics').rglob('*.py'))
     paths += [p for p in [code_root/'train_weather_hfc.py', code_root/'weather_hfc_training.py',
-                         code_root/'weather_hfc_protocol.py', code_root/'ultralytics/cfg/default.yaml'] if p.is_file()]
+                         code_root/'weather_hfc_protocol.py', code_root/'weather_amp.py',
+                         code_root/'ultralytics/cfg/default.yaml'] if p.is_file()]
     data = yaml.safe_load(Path(protocol['data']).read_text(encoding='utf-8'))
     root = Path(data.get('path', Path(protocol['data']).parent))
     for key in ('train','val','test'):

@@ -1,5 +1,9 @@
 # 第四章 HFC 模型与数据配置
 
+服务器先训练基线：进入本子目录，修改`train.py`顶部的`DATA_ROOT`和`ORIGINAL_WEIGHTS`，保持`CONFIGURATION = "baseline"`，执行`python train.py --check`，通过后`python -u train.py`。后续仅修改`CONFIGURATION`即可切换八组消融。完整步骤及数据逻辑见[服务器基线指南](docs/experiments/chapter4-server-baseline.md)。
+
+`train.py`是服务器预设（batch8、AMP）；下文`train_weather_hfc.py`与PowerShell高级入口保留本地默认（batch2、FP32）。同一正式比较需固定统一参数。
+
 2026-11-19依据最新第四章完成本地复核。H/F/C及八组模型YAML在11月12日已经实现，本次复用并补齐数据、训练、评价与续训入口。配置检查不等于正式实验结果。
 
 2026-11-20再次独立审查，当前准备范围为下列8组核心配置及12次训练计划；外部8种比较模型尚未就绪。当前本机默认协议是640、batch2、FP32，不能与论文旧稿的batch8、AMP混写。新的审查证据及修复记录见[本轮审查](docs/research/chapter4-readiness-2026-11-20.md)。
@@ -54,7 +58,7 @@ H为P2→P3首个残差块的共享Haar下采样，F为P4投影后的FFT频带�
 .\run_weather_hfc_experiment.ps1 -Configuration hfc -Seed 0 -Train
 ```
 
-八组各seed0，baseline/hfc另补seed1、2，共12次核心训练。计划在`checks/chapter4_run_plan_20261119.csv`。模型出现在多张结果表中时复用其权重，不重复训练。
+八组各seed0，baseline/hfc另补seed1、2，共12次核心训练。服务器`train.py`计划在`checks/chapter4_run_plan_20261119.csv`，运行名包含`_b8_amp`。模型出现在多张结果表中时复用其权重，不重复训练。
 
 八组应采用同一batch、精度和训练预算。当前本地就绪验证只覆盖batch2、FP32；切换batch8、AMP属于另一套运行参数，需要先验证显存与数值稳定，再统一应用于所有组并同步论文。
 
@@ -102,6 +106,8 @@ python train_weather_hfc.py --configuration hfc --manifest /data/SVRDD-weather-v
 上述最后一行仍为预览，确认路径后添加`--train`开始。生成器只重写本项目的清单/YAML，不改数据图像或标签；会核对manifest及选模清单。原图基线权重SHA256为`faf76f76820986b8affaa2de9d91c0c7c3a76c105de3814430d87735d1bcd69b`。环境版本见`checks/weather_environment_20261120.json`，该文件记录已验证本机环境，不是跨平台安装锁。
 
 本子目录`.gitattributes`保留审计文件的原始字节，避免Git换行转换破坏已核准清单的SHA256。正式运行记录冻结代码及输入文件，续训期间保持代码、数据、教师和运行目录不变。
+
+服务器也可以直接用`train.py`，由它自动校验并生成上述本地清单，不必手工执行生成器。`python train.py --check`不训练，但会重建本机项目内的派生配置；生成清单、数据和权重继续不入Git。
 
 ## 验证与尚待工作
 

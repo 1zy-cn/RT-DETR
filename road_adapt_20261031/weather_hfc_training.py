@@ -317,6 +317,10 @@ class WeatherHFCTrainer(RTDETRTrainer):
     def check_detection_data(self, data):
         return check_det_dataset(data, autodownload=False, check_fonts=bool(self.args.plots))
 
+    def check_amp_support(self):
+        from weather_amp import check_weather_amp
+        return check_weather_amp(self.model)
+
     def __init__(self, *args, manifest, teacher_checkpoint=None, consistency_weight=0.1, **kwargs):
         self.manifest = Path(manifest).resolve()
         if not self.manifest.is_file():
@@ -376,7 +380,7 @@ class WeatherHFCTrainer(RTDETRTrainer):
         if not path.is_file():
             raise FileNotFoundError(f"Explicit Weather resume checkpoint does not exist: {path}")
         # Inference loading prefers EMA. Optimizer continuation must use raw model.
-        ckpt = torch.load(path, map_location="cpu")
+        ckpt = torch.load(path, map_location="cpu", weights_only=False)
         runtime = self._resume_runtime(ckpt)
         student = ckpt.get("model")
         if not isinstance(student, WeatherHFCModel) or student.nc != 7:

@@ -77,3 +77,5 @@ Git 不会自动上传未提交的修改。多台设备尽量避免同时修改�
 第四章使用独立子目录[road_adapt_20261031](road_adapt_20261031/WEATHER_HFC_README.md)内的源码和入口。已配置baseline/H/F/C/HF/HC/FC/HFC八组，核心计划共12次训练；数据清单、训练/评价入口和续训协议见该说明及[审查记录](road_adapt_20261031/docs/research/chapter4-readiness-2026-11-20.md)。进入该子目录后运行；仓库根目录的历史第三章入口不替代本入口。
 
 同步范围包含所需Ultralytics依赖源码、八组模型配置、数据配置模板与清单生成器、回归检查和使用说明。原始数据、逐图清单、本机数据YAML、模型权重和训练runs保持在本地；在新设备运行生成器重建数据入口。八种外部比较模型未纳入已就绪范围；技术就绪检查不产生论文检测性能结论。
+
+服务器直接入口：进入`road_adapt_20261031`，填写其`train.py`顶部两条路径，先运行`python train.py --check`，再运行`python -u train.py`。默认训练batch8/AMP天气baseline，后续编辑`CONFIGURATION`切换消融组；步骤见[第四章服务器基线指南](road_adapt_20261031/docs/experiments/chapter4-server-baseline.md)。仓库根目录`train.py`仍为第三章。

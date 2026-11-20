@@ -129,7 +129,7 @@ def main(argv=None):
     import torch
     from weather_hfc_training import WeatherHFCTrainer
     if args.resume:
-        checkpoint = torch.load(protocol['resume_checkpoint'], map_location='cpu')
+        checkpoint = torch.load(protocol['resume_checkpoint'], map_location='cpu', weights_only=False)
         validate_resume_before_init(checkpoint, protocol)
         del checkpoint
         record = json.loads(Path(protocol['resume_record']).read_text(encoding='utf-8'))

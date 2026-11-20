@@ -17,6 +17,8 @@
     "pandas": "2.3.3",
     "seaborn": "0.13.2",
     "tensorboard": "2.21.0",
-    "pytest": "9.1.1"
+    "pytest": "9.1.1",
+    "mmengine": "0.10.7",
+    "PyWavelets": "1.8.0"
   }
 }
