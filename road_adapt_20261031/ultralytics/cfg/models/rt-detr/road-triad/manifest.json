@@ -1,0 +1,154 @@
+{
+  "baseline": {
+    "factors": [
+      false,
+      false,
+      false
+    ],
+    "nc_default": 7,
+    "p3_layer": 19,
+    "decoder_from": [
+      19,
+      22,
+      25
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": null,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\resnet18-SVRDD-baseline.yaml",
+    "source_sha256": "356e1d487d2e8ec4ce8792ba15c299269b9009daa2b407978186c980ef750b14",
+    "yaml_sha256": "45142cf60d2fd8cc70a94deb8717e5609340fd357bb0ace7b62b263a7adacbb6"
+  },
+  "a": {
+    "factors": [
+      true,
+      false,
+      false
+    ],
+    "nc_default": 7,
+    "p3_layer": 19,
+    "decoder_from": [
+      19,
+      22,
+      25
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": null,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\resnet18-SVRDD-baseline.yaml",
+    "source_sha256": "356e1d487d2e8ec4ce8792ba15c299269b9009daa2b407978186c980ef750b14",
+    "yaml_sha256": "849ce2a6a22c68d3ad2cf17f54856a1225ac75a17eac4b1c489473bd0c1916af"
+  },
+  "b": {
+    "factors": [
+      false,
+      true,
+      false
+    ],
+    "nc_default": 7,
+    "p3_layer": 26,
+    "decoder_from": [
+      26,
+      19,
+      12
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": null,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\road-adapt\\paper_lmc_sa_bss_fpn.yaml",
+    "source_sha256": "a3d126762c05de4fb01b9d2e5858eafe5a4b8b72358dd4c9122a40878f619acd",
+    "yaml_sha256": "d45d7a6b256db669f00ce3a73b58260df93b2ef893418eccb93ac4151086854b"
+  },
+  "c": {
+    "factors": [
+      false,
+      false,
+      true
+    ],
+    "nc_default": 7,
+    "p3_layer": 19,
+    "decoder_from": [
+      19,
+      22,
+      25
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": 2,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\resnet18-SVRDD-baseline.yaml",
+    "source_sha256": "356e1d487d2e8ec4ce8792ba15c299269b9009daa2b407978186c980ef750b14",
+    "yaml_sha256": "a36cc2e2928eee941f82c3a8902c7f05151821ba40843a03169421ec6820485b"
+  },
+  "ab": {
+    "factors": [
+      true,
+      true,
+      false
+    ],
+    "nc_default": 7,
+    "p3_layer": 26,
+    "decoder_from": [
+      26,
+      19,
+      12
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": null,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\road-adapt\\paper_lmc_sa_bss_fpn.yaml",
+    "source_sha256": "a3d126762c05de4fb01b9d2e5858eafe5a4b8b72358dd4c9122a40878f619acd",
+    "yaml_sha256": "f6ae8dcb17dcf83f2b71ebdc92e411c5518cfca4d04846419f2c8ffdf77241f8"
+  },
+  "ac": {
+    "factors": [
+      true,
+      false,
+      true
+    ],
+    "nc_default": 7,
+    "p3_layer": 19,
+    "decoder_from": [
+      19,
+      22,
+      25
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": 2,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\resnet18-SVRDD-baseline.yaml",
+    "source_sha256": "356e1d487d2e8ec4ce8792ba15c299269b9009daa2b407978186c980ef750b14",
+    "yaml_sha256": "0694d83a07c60d893ca3ae048dc57f00f5bd091dd83bb145d92d33c1efd1b0f7"
+  },
+  "bc": {
+    "factors": [
+      false,
+      true,
+      true
+    ],
+    "nc_default": 7,
+    "p3_layer": 26,
+    "decoder_from": [
+      26,
+      19,
+      12
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": 2,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\road-adapt\\paper_lmc_sa_bss_fpn.yaml",
+    "source_sha256": "a3d126762c05de4fb01b9d2e5858eafe5a4b8b72358dd4c9122a40878f619acd",
+    "yaml_sha256": "baff02ffff66cbbed26fc9b3ff2f6b9636f9bf5b4b485aa08b937a3ada26a62f"
+  },
+  "abc": {
+    "factors": [
+      true,
+      true,
+      true
+    ],
+    "nc_default": 7,
+    "p3_layer": 26,
+    "decoder_from": [
+      26,
+      19,
+      12
+    ],
+    "precision": "P3_FP32_all_groups_rest_AMP",
+    "conv3xc_gain": 2,
+    "source_yaml": "C:\\Users\\86186\\Documents\\Codex\\2026-10-29\\you\\work\\RT-DETR-road-adapt\\ultralytics\\cfg\\models\\rt-detr\\road-adapt\\paper_lmc_sa_bss_fpn.yaml",
+    "source_sha256": "a3d126762c05de4fb01b9d2e5858eafe5a4b8b72358dd4c9122a40878f619acd",
+    "yaml_sha256": "fa8cb6dfeaaeb6518afb8b0ca27b37109e6f858961e5384338ba1d551ec2c898"
+  }
+}

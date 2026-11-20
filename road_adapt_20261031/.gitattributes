@@ -1,0 +1,3 @@
+# Preserve the exact audited source/list bytes used in protocol SHA256 records.
+# This also preserves the approved CRLF validation JSONL on Linux checkouts.
+* -text

@@ -1,0 +1,90 @@
+{
+  "road_legacy_control": {
+    "compression": "fixed_avg",
+    "high_gate": "original",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "scsa_adaptive_avg": {
+    "compression": "adaptive_avg",
+    "high_gate": "original",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "scsa_adaptive_max": {
+    "compression": "adaptive_max",
+    "high_gate": "original",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "scsa_fixed_mix": {
+    "compression": "fixed_mix",
+    "high_gate": "original",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "road_scsa_only": {
+    "compression": "learned_mix",
+    "high_gate": "original",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "scsa_adaptive_avg_single": {
+    "compression": "adaptive_avg",
+    "high_gate": "original",
+    "head_num": 1,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "hsfpn_none": {
+    "compression": "fixed_avg",
+    "high_gate": "none",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "hsfpn_fixed": {
+    "compression": "fixed_avg",
+    "high_gate": "fixed",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "road_hsfpn_only": {
+    "compression": "fixed_avg",
+    "high_gate": "learned",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "hsfpn_mean_gate": {
+    "compression": "fixed_avg",
+    "high_gate": "mean_gate",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  },
+  "road_both": {
+    "compression": "learned_mix",
+    "high_gate": "learned",
+    "head_num": null,
+    "window_size": 7,
+    "alpha_init": 0.5,
+    "conv3xc": false
+  }
+}

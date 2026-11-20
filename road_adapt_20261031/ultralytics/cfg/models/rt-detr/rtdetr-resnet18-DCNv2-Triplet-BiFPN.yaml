@@ -1,0 +1,52 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# RT-DETR-ResNet18 改进版: DCNv2可变形卷积 + TripletAttention三重注意力 + BiFPN
+# 适用于道路缺陷检测 - 综合增强方案
+
+# Parameters
+nc: 80  # number of classes
+scales:
+  # [depth, width, max_channels]
+  l: [1.00, 1.00, 1024]
+
+backbone:
+  # [from, repeats, module, args]
+  - [-1, 1, ConvNormLayer, [32, 3, 2, 1, 'relu']] # 0-P1
+  - [-1, 1, ConvNormLayer, [32, 3, 1, 1, 'relu']] # 1
+  - [-1, 1, ConvNormLayer, [64, 3, 1, 1, 'relu']] # 2
+  - [-1, 1, nn.MaxPool2d, [3, 2, 1]] # 3-P2
+
+  # 使用TripletAttention增强空间和通道注意力
+  - [-1, 2, Blocks, [64,  BasicBlock_TripletAttention, 2, True]] # 4
+  - [-1, 2, Blocks, [128, BasicBlock_TripletAttention, 3, True]] # 5-P3
+  - [-1, 2, Blocks, [256, BasicBlock_TripletAttention, 4, True]] # 6-P4
+  - [-1, 2, Blocks, [512, BasicBlock_TripletAttention, 5, True]] # 7-P5
+
+head:
+  - [-1, 1, DCNv2, [256, 3, 1, 1]]  # 8 用DCNv2处理P5
+  - [-1, 1, AIFI, [1024, 8]]  # 9
+
+  - [5, 1, Conv, [256]]  # 10-P3/8
+  - [6, 1, DCNv2, [256, 3, 1, 1]]  # 11-P4/16 用DCNv2
+  - [9, 1, Conv, [256]]  # 12-P5/32
+
+  # BiFPN自顶向下路径
+  - [-1, 1, nn.Upsample, [None, 2, 'nearest']] # 13 P5->P4
+  - [[-1, 11], 1, Bi_FPN, []] # 14
+  - [-1, 3, RepC3, [256, 0.5]] # 15-P4/16
+
+  - [-1, 1, nn.Upsample, [None, 2, 'nearest']] # 16 P4->P3
+  - [[-1, 10], 1, Bi_FPN, []] # 17
+  - [-1, 3, RepC3, [256, 0.5]] # 18-P3/8
+
+  # BiFPN自底向上路径
+  - [-1, 1, Conv, [256, 3, 2]] # 19 P3->P4
+  - [[-1, 11, 15], 1, Bi_FPN, []] # 20
+  - [-1, 3, RepC3, [256, 0.5]] # 21-P4/16
+
+  - [-1, 1, Conv, [256, 3, 2]] # 22 P4->P5
+  - [[-1, 12], 1, Bi_FPN, []] # 23
+  - [-1, 3, RepC3, [256, 0.5]] # 24-P5/32
+
+  - [[18, 21, 24], 1, RTDETRDecoder, [nc, 256, 300, 4, 8, 3]]  # Detect(P3, P4, P5)
+
+

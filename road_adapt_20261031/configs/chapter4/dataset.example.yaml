@@ -1,0 +1,15 @@
+# Schema only. Generate dataset.yaml and the local lists before training:
+# python scripts/configure_chapter4_data.py --data-root <DATA_ROOT>
+path: "<DATA_ROOT>"
+train: "<PROJECT_ROOT>/configs/chapter4/train_mixed.txt"
+val: "<PROJECT_ROOT>/configs/chapter4/valid_selection_v2.txt"
+test: "<PROJECT_ROOT>/configs/chapter4/test_primary_6000.txt"
+nc: 7
+names:
+  0: "D00-纵向裂缝"
+  1: "D10-横向裂缝"
+  2: "D20-网状裂缝"
+  3: "D40-坑槽"
+  4: "井盖"
+  5: "纵向修补"
+  6: "横向修补"

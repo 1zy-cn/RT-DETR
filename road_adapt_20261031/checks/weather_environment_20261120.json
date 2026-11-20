@@ -1,0 +1,22 @@
+{
+  "scope": "Verified local environment snapshot, not a cross-platform installation lock",
+  "python": "3.10.22 | packaged by conda-forge | (main, Oct  6 2026, 22:57:13) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "torch": "2.0.1+cu118",
+    "torchvision": "0.15.2+cu118",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "opencv-python": "4.10.0.84",
+    "pillow": "9.5.0",
+    "PyYAML": "6.0.3",
+    "timm": "0.9.12",
+    "einops": "0.8.1",
+    "thop": "0.1.1-2209072238",
+    "matplotlib": "3.10.9",
+    "pandas": "2.3.3",
+    "seaborn": "0.13.2",
+    "tensorboard": "2.21.0",
+    "pytest": "9.1.1"
+  }
+}

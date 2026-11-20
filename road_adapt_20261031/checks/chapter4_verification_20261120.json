@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-20",
+  "scope": "Local technical readiness; not a formal experiment or efficacy evidence",
+  "regressions": {
+    "passed": 113,
+    "failures": 0,
+    "errors": 0
+  },
+  "staged_checkout_regressions": {
+    "passed": 113,
+    "failures": 0,
+    "regenerated_data_paths": true,
+    "exported_source_files_byte_exact": 415
+  },
+  "data": {
+    "output_labels_read": 44000,
+    "source_labels_read": 8000,
+    "label_mismatches": 0,
+    "regenerated_artifacts_match": 18,
+    "train": 24000,
+    "val": 4000,
+    "primary_test": 6000
+  },
+  "gpu": {
+    "imgsz": 640,
+    "batch": 2,
+    "precision": "FP32",
+    "device": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "same_batch": true,
+    "original_inputs_unchanged": true,
+    "configurations": [
+      {
+        "configuration": "baseline",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": null,
+        "teacher_all_state_unchanged": null,
+        "peak_allocated_bytes": 1299965440,
+        "peak_reserved_bytes": 1660944384
+      },
+      {
+        "configuration": "h",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": null,
+        "teacher_all_state_unchanged": null,
+        "peak_allocated_bytes": 1347741184,
+        "peak_reserved_bytes": 1675624448
+      },
+      {
+        "configuration": "f",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": null,
+        "teacher_all_state_unchanged": null,
+        "peak_allocated_bytes": 1350591488,
+        "peak_reserved_bytes": 1673527296
+      },
+      {
+        "configuration": "hf",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": null,
+        "teacher_all_state_unchanged": null,
+        "peak_allocated_bytes": 1362640896,
+        "peak_reserved_bytes": 1713373184
+      },
+      {
+        "configuration": "c",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": true,
+        "teacher_all_state_unchanged": true,
+        "peak_allocated_bytes": 1474182144,
+        "peak_reserved_bytes": 1736441856
+      },
+      {
+        "configuration": "hc",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": true,
+        "teacher_all_state_unchanged": true,
+        "peak_allocated_bytes": 1487485952,
+        "peak_reserved_bytes": 1751121920
+      },
+      {
+        "configuration": "fc",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": true,
+        "teacher_all_state_unchanged": true,
+        "peak_allocated_bytes": 1488960000,
+        "peak_reserved_bytes": 1751121920
+      },
+      {
+        "configuration": "hfc",
+        "passed": true,
+        "optimizer_updated": true,
+        "optimizer_steps": 1,
+        "teacher_frozen": true,
+        "teacher_all_state_unchanged": true,
+        "peak_allocated_bytes": 1501723136,
+        "peak_reserved_bytes": 1765801984
+      }
+    ]
+  },
+  "source_fingerprints": {
+    "checks/verify_weather_readiness.py": "b35f90277165d52040bab3d3c3d51d20ceae7d0a2b83a94a6a5738aa4b98b263",
+    "weather_hfc_training.py": "a5ec85e95c5cf3ee28cc2a4971ae934559ab72e5f4e7c081e80a084ace87b940",
+    "train_weather_hfc.py": "55084767293a8f11606b9591ad523e20583e9853cabcd4b9e58a0852c33bb9ed",
+    "ultralytics/nn/Addmodules/WeatherHFC.py": "78f20b04bc57ba9ca86334d920dfbbac63d7cfa08e1da87eedd0bd2b74ae1f4d",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/baseline.yaml": "359e6790461ef81efe98916655c3071286b28987da246101ae5cb3a9af24eb4a",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/h.yaml": "c49fef7851a960940add30c6a6f306bb63c668839b7a5253a3567ca959ca53c3",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/f.yaml": "4a120b9a031a070f46804f2402f2875cdb92e9b900b6b0dea64eec5cbf7f596e",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/hf.yaml": "913011b6f93fb1d5f8a9b653dfa771af59101c286715bf9d0596993cb19ceeeb",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/c.yaml": "92380d42c5a9b98d2932e74d5836ab6d7c974c30abc51b3ba59b57c06f2344db",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/hc.yaml": "250a343104f56184fe222b72f10c0646ff45c59987a0ddd6bc8f6cdc4bd4dbf0",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/fc.yaml": "a84c9b614a35f38026c6633c5d3bda697a73f8a5358b9069025ec62f45231741",
+    "ultralytics/cfg/models/rt-detr/weather-hfc/hfc.yaml": "feef37b8c5b30ab200c39549bcb2cb211468f1ed6b709d1ccfc2ecee8440a9e9"
+  },
+  "input_hashes": {
+    "manifest": "748b8851e80b87195866b19d80c26f5d2789430b74711e0abc5405c9afa8951f",
+    "original_baseline": "faf76f76820986b8affaa2de9d91c0c7c3a76c105de3814430d87735d1bcd69b"
+  },
+  "formal_training_started": false,
+  "formal_test_performance_run": false,
+  "external_comparisons_ready": false,
+  "limitations": [
+    "Single-update probe does not measure final AP, convergence or full-run peak memory.",
+    "Default workers=0 epoch sample order resumes; GPU bitwise reproducibility is not promised.",
+    "Six severe training examples visually screened; difficult lowlight labels still need human review.",
+    "Manuscript batch/AMP, warmup and score-floor descriptions need synchronization."
+  ]
+}
