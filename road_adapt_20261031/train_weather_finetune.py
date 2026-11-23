@@ -10,6 +10,7 @@ import argparse
 from datetime import datetime, timezone
 import importlib.util
 import json
+import math
 from pathlib import Path
 import platform
 from types import SimpleNamespace
@@ -43,6 +44,12 @@ def make_parser():
     parser.add_argument('--batch',type=int,default=8)
     parser.add_argument('--imgsz',type=int,default=640)
     parser.add_argument('--epochs',type=int,default=300)
+    parser.add_argument('--lr0',type=float,default=1e-5,
+        help='Fresh-run initial learning rate; finite and positive')
+    parser.add_argument('--lrf',type=float,default=1.,
+        help='Fresh-run final learning-rate fraction in [0, 1]')
+    parser.add_argument('--cos-lr',action='store_true',
+        help='Use the native cosine schedule for a fresh run; otherwise linear')
     parser.add_argument('--workers',type=int,default=0)
     parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--device',default='0')
@@ -56,6 +63,11 @@ def make_parser():
 def build_protocol(args):
     if type(args.budget_epochs) is not int or args.budget_epochs<1:
         raise ValueError('budget-epochs must be a positive integer')
+    if args.resume is None:
+        if not math.isfinite(args.lr0) or args.lr0<=0:
+            raise ValueError('lr0 must be finite and positive')
+        if not math.isfinite(args.lrf) or not 0<=args.lrf<=1:
+            raise ValueError('lrf must be finite and in [0, 1]')
     if args.resume is None and args.name is None:
         precision='amp' if args.amp else 'fp32'
         args.name=f'baseline_finetune_v2_seed{args.seed}_b{args.batch}_{precision}'
@@ -67,7 +79,7 @@ def build_protocol(args):
         if protocol.get('configuration')!='baseline':
             raise ValueError('This entrypoint only supports the baseline')
     else:
-        protocol['train_args'].update(lr0=1e-5,lrf=1.,warmup_epochs=0.)
+        protocol['train_args'].update(lr0=args.lr0,lrf=args.lrf,cos_lr=args.cos_lr,warmup_epochs=0.)
         protocol.update(training_profile=PROFILE,finetune_policy=dict(POLICY),
                         validation_interval_updates=VALIDATION_INTERVAL_UPDATES)
     protocol['execution_budget_epochs']=args.budget_epochs
