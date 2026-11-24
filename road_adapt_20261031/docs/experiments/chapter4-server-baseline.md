@@ -16,7 +16,7 @@ DATA_ROOT = Path("天气数据集SVRDD-weather-v1的实际目录")
 ORIGINAL_WEIGHTS = Path("已有原图基础RT-DETR-R18的best.pt实际路径")
 ```
 
-保留`CONFIGURATION = "baseline"`、`BATCH = 8`、`AMP = True`、`SEED = 0`。然后：
+保留`CONFIGURATION = "baseline"`、`TRAINING_PROFILE = "baseline_finetune_v2"`、`BUDGET_EPOCHS = 1`、`BATCH = 8`、`AMP = True`、`SEED = 0`。然后：
 
 ```bash
 python train.py --check
@@ -46,23 +46,26 @@ python -u train.py
 
 当前协议保留重度图检测监督，C仅作用于轻/中度配对，与论文当前表述一致。此前重度低照细裂缝的人工可辨性仍待核验；如决定修改重度样本排除/忽略规则，应对所有方法统一，已经训练的baseline也需要按新规则重训。当前结论限定为受控合成天气。
 
-## 统一参数与结果目录
+## 当前基线候选与旧配方
 
-`train.py`服务器预设：640、batch8、AMP、workers0、AdamW、lr0/weight_decay均1e-4、最多300轮、patience20、seed0；`nbs=batch`，梯度累积为1。预热为3轮对应的小批数（24k/b8时为9,000）；固定几何/HSV增强关闭，AP阈值0.001且最多300预测，不加NMS。论文旧稿关于预热仅索引0–3以及不执行0.001过滤的表述仍需同步。
+`train.py`当前默认基线v2：640、batch8、AMP、workers0、AdamW、lr0=1e-5、lrf1、WD1e-4、总上限30轮、patience20、seed0；`nbs=batch`，梯度累积为1。固定64步预热、AMP初始scale64、验证batch4，每1000次更新完整验证并保留best。固定几何/HSV增强关闭，AP阈值0.001且最多300预测，不加NMS。
 
-服务器预设与旧高级入口`train_weather_hfc.py`的本地默认batch2/FP32有意区分。8组正式比较统一使用最终选定的batch和精度，不能各组随意修改；调整模型时通常只改`CONFIGURATION`。本地RTX3060的batch8/AMP单步检查不等于服务器长程显存/收敛已实测，服务器环境与实际AMP状态会写入运行记录。
+每次默认最多一个完整epoch，达到预算时`BUDGET_PAUSED`并保留完整last状态；预算暂停不是早停、训练失败或效果验收，也不调用服务器关机。先检查验证/best再决定续训，不直接启动整晚来追轮数。本地11月22日参考运行best为4k验证46.171%，第21轮末41.635%；优先保留best，不以末轮作为弱基线。
 
-默认基线目录为`runs/weather_hfc/baseline_seed0_b8_amp/`。该运行自己的`weights/best.pt`、`last.pt`、`results.csv`及`weather_protocol.json`保存在此。已有同名运行目录拒绝覆盖；后续改变组名会自动产生独立目录。
+旧`legacy_hfc`仍保留LR1e-4、lrf0.1、3epoch预热与`LEGACY_EPOCHS=300`上限；v2目前仅验收B，另外七组尚未按同一新配方验收。正式8组必须共享最终固定的训练和选模协议，不能混用两套配方后归因于结构。后峰值1e-6诊断也不支持从原图B0起默认全程1e-6。详见[入口与预算说明](../research/weather-baseline-launcher-2026-11-24.md)。
+
+默认v2基线目录为`runs/weather_hfc/baseline_baseline_finetune_v2_seed0_b8_amp/`。该运行自己的`weights/best.pt`、`last.pt`、`results.csv`及`weather_protocol.json`保存在此。中途选出的best仅用于推理；续训使用完整last。已有同名运行目录拒绝覆盖，配方名也进入新目录名。
 
 ## 消融与续训
 
-后续把顶部`CONFIGURATION`改为以下一个值即可，八组完整配置均已存在：
+八组模型配置均已存在。若明确使用原旧配方，可设：
 
 ```python
+TRAINING_PROFILE = "legacy_hfc"
 CONFIGURATION = "h"    # baseline / h / f / c / hf / hc / fc / hfc
 ```
 
-每组保持同一数据和`ORIGINAL_WEIGHTS`，切换组后重新运行`python train.py --check`及`python -u train.py`。重复实验仅另改`SEED`。
+各组保持同一数据、原图初始化及冻结教师口径，不能将上述legacy组与v2的B直接作为结构消融。选择v2却改成非B组会在重写数据清单前明确拒绝。正式训练前应先统一并验收完整协议。
 
 如需恢复中断的基线，把顶部设为：
 
@@ -70,7 +73,7 @@ CONFIGURATION = "h"    # baseline / h / f / c / hf / hc / fc / hfc
 RESUME_CHECKPOINT = Path("原基线运行目录/weights/last.pt")
 ```
 
-随后仍运行`python -u train.py`。续训严格沿用原运行记录，不应用顶部新配置，也不重建数据清单；保持代码、输入和路径不变。开始下一消融组前，把`RESUME_CHECKPOINT`恢复为`None`。
+随后仍运行`python -u train.py`。入口从原记录选择配方；续训不应用顶部新训练配置，也不重建数据清单，v2仅允许改变本次`BUDGET_EPOCHS`。保持原冻结代码、输入和路径不变；旧版本checkpoint应在原源码版本继续，不能跳过SHA验证。新运行前把`RESUME_CHECKPOINT`恢复为`None`。
 
 ## 环境
 

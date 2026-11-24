@@ -1,8 +1,8 @@
 # 第四章 HFC 模型与数据配置
 
-服务器先训练基线：进入本子目录，修改`train.py`顶部的`DATA_ROOT`和`ORIGINAL_WEIGHTS`，保持`CONFIGURATION = "baseline"`，执行`python train.py --check`，通过后`python -u train.py`。后续仅修改`CONFIGURATION`即可切换八组消融。完整步骤及数据逻辑见[服务器基线指南](docs/experiments/chapter4-server-baseline.md)。
+服务器先训练基线：进入本子目录，修改`train.py`顶部的`DATA_ROOT`和`ORIGINAL_WEIGHTS`，保持`CONFIGURATION = "baseline"`与`TRAINING_PROFILE = "baseline_finetune_v2"`，执行`python train.py --check`，通过后`python -u train.py`。当前默认一次最多一个完整epoch，保存best后先检查验证结果。完整步骤及数据逻辑见[服务器基线指南](docs/experiments/chapter4-server-baseline.md)。
 
-`train.py`是服务器预设（batch8、AMP）；下文`train_weather_hfc.py`与PowerShell高级入口保留本地默认（batch2、FP32）。同一正式比较需固定统一参数。
+2026-11-24：基线候选v2只验收B组；旧八组需显式选择`legacy_hfc`，不能仅改组名后静默混用不同配方。下文`train_weather_hfc.py`与PowerShell高级入口保留旧默认（batch2、FP32、LR1e-4）；它们与v2不是同一训练协议。入口修正、预算及本地基线结果见[本轮说明](docs/research/weather-baseline-launcher-2026-11-24.md)。
 
 2026-11-19依据最新第四章完成本地复核。H/F/C及八组模型YAML在11月12日已经实现，本次复用并补齐数据、训练、评价与续训入口。配置检查不等于正式实验结果。
 
@@ -13,7 +13,7 @@
 配置名：`baseline/h/f/c/hf/hc/fc/hfc`，文件在`ultralytics/cfg/models/rt-detr/weather-hfc/`。
 H为P2→P3首个残差块的共享Haar下采样，F为P4投影后的FFT频带选择，C为冻结原图基础教师与学生融合后P3的GT框3×3区域余弦约束，λ=0.1。C只用于轻中度配对；原图、重度仍接受检测监督。推理仅保留学生。
 
-默认640、batch2、workers0、FP32、AdamW、lr0/weight_decay=1e-4、lrf0.1、线性日程、最多300轮、patience20。Weather预热按`round(3*len(train_loader))`小批迭代；其他既有trainer的预热默认行为不变。几何/HSV/Mosaic/MixUp增强关闭。AP保留分数≥0.001且最多300个预测，不向DETR增加NMS。
+旧高级入口默认640、batch2、workers0、FP32、AdamW、lr0/weight_decay=1e-4、lrf0.1、线性日程、最多300轮、patience20。Weather预热按`round(3*len(train_loader))`小批迭代；其他既有trainer的预热默认行为不变。几何/HSV/Mosaic/MixUp增强关闭。AP保留分数≥0.001且最多300个预测，不向DETR增加NMS。当前服务器v2默认另见上方链接。
 
 默认解释器：`D:/Users/86186/Miniconda3/envs/rtdetr/python.exe`。
 共同学生初始化及固定教师：
